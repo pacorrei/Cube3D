@@ -41,86 +41,48 @@ void    verif_valid_map(t_parsing *pars, int i, int j)
         error_miss_informations(pars);
 }
 
-void       verif_first_line(t_parsing *pars, int i, int j)
+void       verif_first_last_line(t_parsing *pars, int i, int j)
 {
+    j = 0;
     while (pars->info[i][j] != '\0')
     {
         if (pars->info[i][j] != ' ' && pars->info[i][j] != '1')
             error_informations(pars);
-        if (pars->info[i][j] == '1')
-        {
-            while (pars->info[i][j + 1] != '\0')
-            {
-                if (pars->info[i][j] == ' ' && pars->info[i][j + 1] != ' ' &&
-                pars->info[i][j + 1] != '\0' && pars->info[i + 1][j] != ' ' &&
-                pars->info[i + 1][j] != '1')
-                    error_informations(pars);
-                j++;
-            }
-        }
-        j++;
-    }
-}
-
-void       verif_last_line(t_parsing *pars, int i, int j)
-{
-    while (pars->info[i][j] != '\0')
-    {
-        if (pars->info[i][j] != ' ' && pars->info[i][j] != '1')
-            error_informations(pars);
-        if (pars->info[i][j] == '1')
-        {
-            while (pars->info[i][j + 1] != '\0')
-            {
-                if (pars->info[i][j] == ' ' && pars->info[i][j + 1] != ' ' &&
-                pars->info[i][j + 1] != '\0' && pars->info[i - 1][j] != ' ' &&
-                pars->info[i - 1][j] != '1')
-                    error_informations(pars);
-                j++;
-            }
-        }
         j++;
     }
 }
 
 void    verif_inside_map(t_parsing *pars, int i, int j)
 {
-     if (pars->info[i][j] == ' ' && pars->info[i][j + 1] != ' ' &&
-    pars->info[i][j + 1] != '\0' && pars->info[i][j + 1] != '1')
-        error_informations(pars);
-    if (pars->info[i][j] == ' ' && pars->info[i][j - 1] != ' ' &&
-    pars->info[i][j - 1] != '1' )
-        error_informations(pars);
-    if (pars->info[i][j] == ' ' && pars->info[i + 1][j] != ' ' &&
-    pars->info[i + 1][j] != '1')
-        error_informations(pars);
-    if (pars->info[i][j] == ' ' && pars->info[i - 1][j] != ' ' &&
-    pars->info[i - 1][j] != '1')
-        error_informations(pars);
     if (pars->info[i][j] == '0' && pars->info[i][j + 1] != '0' &&
-    pars->info[i][j + 1] != pars->pos_player && pars->info[i][j + 1] != '1')
+    pars->info[i][j + 1] != pars->pos_player && pars->info[i][j + 1] != '1'
+    && pars->info[i][j + 1] != '2')
         error_informations(pars);
     if (pars->info[i][j] == '0' && pars->info[i][j - 1] != '0' &&
-    pars->info[i][j - 1] != '1' && pars->info[i][j - 1] != pars->pos_player)
+    pars->info[i][j - 1] != '1' && pars->info[i][j - 1] != pars->pos_player
+    && pars->info[i][j - 1] != '2')
         error_informations(pars);
     if (pars->info[i][j] == '0' && pars->info[i + 1][j] != '0' &&
-    pars->info[i + 1][j] != '1' && pars->info[i + 1][j] != pars->pos_player)
+    pars->info[i + 1][j] != '1' && pars->info[i + 1][j] != pars->pos_player
+    && pars->info[i + 1][j] != '2')
         error_informations(pars);
     if (pars->info[i][j] == '0' && pars->info[i - 1][j] != '0' &&
-    pars->info[i - 1][j] != '1' && pars->info[i - 1][j] != pars->pos_player)
+    pars->info[i - 1][j] != '1' && pars->info[i - 1][j] != pars->pos_player
+    && pars->info[i - 1][j] != '0')
         error_informations(pars);  
 }
 
 void    verif_close_map(t_parsing *pars, int i, int j)
 {
-    int verif;
+    int     verif;
     char    last_char;
 
     verif = 0;
-    verif_first_line(pars, i, j);
+    verif_first_last_line(pars, i, j);
     i++;
     while (pars->info[i + 1] != NULL)
     {
+        j = 0;
         while (pars->info[i][j] != '\0')
         {
             if (pars->info[i][j] == '1' && verif == 0)
@@ -134,11 +96,10 @@ void    verif_close_map(t_parsing *pars, int i, int j)
             j++;
         }
         i++;
-        j = 0;
         verif = 0;
         if (last_char == '0' || last_char == '2' ||
         last_char == pars->pos_player)
             error_informations(pars);
     }
-    verif_last_line(pars, i, j);
+    verif_first_last_line(pars, i, j);
 }

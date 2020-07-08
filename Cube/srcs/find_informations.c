@@ -62,14 +62,20 @@ void    find_informations(t_parsing *pars)
                 ft_putstr(" Map ok");
                 map_verif = 1;
             }
-            if (verif == 0 && map_verif == 0 && pars->info[i][j] != ' ' && pars->info[i][j] != 'R' &&
+            if (verif == 0 && map_verif == 0 && (pars->info[i][j] != ' ' && pars->info[i][j] != 'R' &&
             pars->info[i][j] != 'C' && pars->info[i][j] != 'S' &&
             pars->info[i][j] != 'F' && (pars->info[i][j] != 'N' &&
             pars->info[i][j + 1] != 'O') && (pars->info[i][j] != 'S' &&
             pars->info[i][j + 1] != 'O') && (pars->info[i][j] != 'W' &&
             pars->info[i][j + 1] != 'E') && (pars->info[i][j] != 'E' &&
-            pars->info[i][j + 1] != 'A'))
+            pars->info[i][j + 1] != 'A')))
                 error_informations(pars);
+            if (verif == 0 && map_verif == 0 && ((pars->info[i][j] == 'N' &&
+            pars->info[i][j + 1] != 'O') || (pars->info[i][j] == 'S' &&
+            pars->info[i][j + 1] != 'O' && pars->info[i][j + 1] != ' ') ||
+            (pars->info[i][j] == 'W' && pars->info[i][j + 1] != 'E') ||
+            (pars->info[i][j] == 'E' && pars->info[i][j + 1] != 'A')))
+                 error_informations(pars);
             if (verif == 0 && map_verif == 0 && (pars->info[i][j] == 'R' ||
             pars->info[i][j] == 'C' || pars->info[i][j] == 'S' ||
             pars->info[i][j] == 'F' || (pars->info[i][j] == 'N' &&
@@ -89,4 +95,6 @@ void    find_informations(t_parsing *pars)
         j = 0;
         verif = 0;
     }
+    if (map_verif == 0)
+        error_miss_informations(pars);
 }

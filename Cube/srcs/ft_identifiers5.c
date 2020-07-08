@@ -39,6 +39,8 @@ void    identifiers_s(t_parsing *pars, int i, int j)
     int k;
 
     k = 0;
+    if (pars->path_txt_s != NULL)
+        error_informations(pars);
     while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
     {
         if (pars->info[i][j] != ' ')
@@ -53,7 +55,8 @@ void    identifiers_s(t_parsing *pars, int i, int j)
     while (pars->info[i][j] != '\0')
     {
         if (pars->info[i][j] != ' ')
-          error_informations(pars);  
+          error_informations(pars);
+        j++;
     }
     attribute_path_s(pars, i, j, k);
 }

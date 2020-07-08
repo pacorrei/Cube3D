@@ -11,6 +11,4 @@ int	main(int ac, char **av)
 	if (ac == 3)
 		verif_argument_save(av[2]);
 	recup_file(fd);
-
-	return (0);
 }

@@ -39,6 +39,8 @@ void    identifiers_no(t_parsing *pars, int i, int j)
     int k;
 
     k = 0;
+    if (pars->path_txt_no != NULL)
+        error_informations(pars);
     while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
     {
         if (pars->info[i][j] != ' ')
@@ -53,7 +55,8 @@ void    identifiers_no(t_parsing *pars, int i, int j)
     while (pars->info[i][j] != '\0')
     {
         if (pars->info[i][j] != ' ')
-          error_informations(pars);  
+          error_informations(pars);
+        j++;
     }
     attribute_path_no(pars, i, j, k);
 }
@@ -85,6 +88,8 @@ void    identifiers_so(t_parsing *pars, int i, int j)
     int k;
 
     k = 0;
+    if (pars->path_txt_so != NULL)
+        error_informations(pars);
     while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
     {
         if (pars->info[i][j] != ' ')
@@ -99,7 +104,8 @@ void    identifiers_so(t_parsing *pars, int i, int j)
     while (pars->info[i][j] != '\0')
     {
         if (pars->info[i][j] != ' ')
-          error_informations(pars);  
+          error_informations(pars);
+        j++;  
     }
     attribute_path_so(pars, i, j, k);
 }
