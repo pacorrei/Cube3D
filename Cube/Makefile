@@ -29,8 +29,8 @@ OBJS = $(addprefix $(OBJS_PATH), $(OBJS_NAME))
 $(OBJS_PATH)%.o: $(SRCS_PATH)%.c
 	gcc -c $(FLAGS) $(HEAD) -o $@ -c $<
 
-$(NAME):	$(OBJS)
-		$(CC) $(CFLAGS) $(SRCS) $(HEAD) -o $(NAME)
+$(NAME):	${OBJS}
+		${CC} ${CFLAGS} ${SRCS} ${HEAD} -o ${NAME}
 
 clean:
 	$(RM) $(OBJS)

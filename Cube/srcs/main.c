@@ -5,32 +5,33 @@ void vector_dir_value(t_parsing *pars)
 	if (pars->pos_player == 'N')
 	{
 		pars->dirX = 0;
-		pars->dirY = 1;
-    pars->planeX = 0;
-    pars->planeY = 0.66;
+		pars->dirY = -1;
+    pars->planeX = 0.66;
+    pars->planeY = 0;
 	}
 	if (pars->pos_player == 'S')
 	{
 		pars->dirX = 0;
-		pars->dirY = -1;
-    pars->planeX = 0;
-    pars->planeY = -0.66;
+		pars->dirY = 1;
+    pars->planeX = -0.66;
+    pars->planeY = 0;
 	}
 	if (pars->pos_player == 'E')
 	{
 		pars->dirX = 1;
 		pars->dirY = 0;
-    pars->planeX = 0.66;
-    pars->planeY = 0;
+    pars->planeX = 0;
+    pars->planeY = 0.66;
 	}
 	if (pars->pos_player == 'W')
 	{
 		pars->dirX = -1;
 		pars->dirY = 0;
-    pars->planeX = -0.66;
-    pars->planeY = 0;
+    pars->planeX = 0;
+    pars->planeY = -0.66;
 	}
 }
+
 void            my_mlx_pixel_put(t_parsing *pars, int x, int y, int color)
 {
     int pos;
@@ -46,7 +47,6 @@ void  clean_screen(t_parsing *pars, int x_max, int y_max)
   int x;
   int y;
 
-  x = 0;
   y = 0;
   while (y < y_max)
   {
@@ -74,16 +74,16 @@ int             key_action(int keycode, t_parsing *pars)
   }
     if (keycode == 122)
     {
-      if(pars->worldMap[(int)(pars->posX + pars->dirX * pars->moveSpeed)][(int)pars->posY] == '0')
+      if(pars->worldMap[(int)(pars->posX + pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX += pars->dirX * pars->moveSpeed;
-      if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->dirY * pars->moveSpeed)] == '0')
+      if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->dirY * pars->moveSpeed)] != '1')
         pars->posY += pars->dirY * pars->moveSpeed; 
     }
     if (keycode == 115)
     {
-      if(pars->worldMap[(int)(pars->posX - pars->dirX * pars->moveSpeed)][(int)pars->posY] == '0')
+      if(pars->worldMap[(int)(pars->posX - pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX -= pars->dirX * pars->moveSpeed;
-      if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->dirY * pars->moveSpeed)] == '0')
+      if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->dirY * pars->moveSpeed)] != '1')
         pars->posY -= pars->dirY * pars->moveSpeed;
     }
     if (keycode == 113)
@@ -104,7 +104,7 @@ int             key_action(int keycode, t_parsing *pars)
       pars->planeX = pars->planeX * cos(-pars->rotSpeed) - pars->planeY * sin(-pars->rotSpeed);
       pars->planeY = pars->oldPlaneX * sin(-pars->rotSpeed) + pars->planeY * cos(-pars->rotSpeed);
     }
-    printf("posx :%f posy :%f dirx :%f diry :%f planex :%f planey :%f\n", pars->posX, pars->posY, pars->dirX, pars->dirY, pars->planeX, pars->planeY);
+    //printf("posx :%f posy :%f dirx :%f diry :%f planex :%f planey :%f\n", pars->posX, pars->posY, pars->dirX, pars->dirY, pars->planeX, pars->planeY);
     raycasting(pars);
     return (0);
 }
@@ -133,7 +133,7 @@ int	main(int ac, char **av)
     pars.win = mlx_new_window(pars.mlx, pars.res_x, pars.res_y, "Cube3D");
     pars.img = mlx_new_image(pars.mlx, pars.res_x, pars.res_y);
     pars.addr = mlx_get_data_addr(pars.img, &pars.bits_per_pixel, &pars.line_length, &pars.endian);
-    raycasting(&pars);
+	raycasting(&pars);
     mlx_hook(pars.win, 2, 1L<<0, key_action, &pars);
     mlx_loop(pars.mlx);
 }
@@ -153,8 +153,8 @@ int	main(int ac, char **av)
       pars->mapX = (int)pars->posX;
       pars->mapY = (int)pars->posY;
      // printf("raydir; %f\n", pars->rayDirX);
-      pars->deltaDistX = (pars->rayDirY == 0) ? 0 : ((pars->rayDirX == 0) ? 1 : abs(1 / pars->rayDirX));
-      pars->deltaDistY = (pars->rayDirX == 0) ? 0 : ((pars->rayDirY == 0) ? 1 : abs(1 / pars->rayDirY));
+      pars->deltaDistX = fabs(1 / pars->rayDirX);
+      pars->deltaDistY = fabs(1 / pars->rayDirY);
 
       pars->hit = 0;
       if(pars->rayDirX < 0)
@@ -199,7 +199,7 @@ int	main(int ac, char **av)
         }
        // printf("mapx; %d\n", pars->mapX);
         //printf("mapy; %d\n", pars->mapY);
-        if(pars->worldMap[pars->mapX][pars->mapY] > 0)
+        if(pars->worldMap[pars->mapX][pars->mapY] == '1')
           pars->hit = 1;
       }
       //printf("mapy; %d\n", pars->mapY);
