@@ -12,11 +12,34 @@
 
 #include "ft_cube.h"
 
+void    make_world_map(t_parsing *pars, int imin, int imax)
+{
+    int i;
+
+    i = imax - imin;
+    pars->worldMap = (char**)malloc(sizeof(char*) * (i + 1));
+    pars->worldMap[i] = NULL;
+    i = 0;
+    while (imin < imax)
+    {
+        //printf("imin : %d\n", imin);
+        pars->worldMap[i] = ft_strdup(pars->info[imin]);
+        imin++;
+        i++;
+    }
+}
+
 void    verif_valid_map(t_parsing *pars, int i, int j)
 {
     int verif;
+    int verif2;
+    int copy_i;
+    int line_empty;
 
     verif = 0;
+    verif2 = 0;
+    copy_i = i;
+    line_empty = 0;
     pars->pos_player = 0;
     while (pars->info[i] != NULL)
     {
@@ -26,14 +49,24 @@ void    verif_valid_map(t_parsing *pars, int i, int j)
             || pars->info[i][j] == 'W' || pars->info[i][j] == 'E'))
             {
                 pars->pos_player = pars->info[i][j];
+                pars->posY = j;
+                pars->posX = i - copy_i;
                 verif++;
                 j++;
             }
+            if (line_empty == 0 && pars->info[i][j] == '1')
+                line_empty = 1;
             if ((pars->info[i][j] != ' ' && pars->info[i][j] != '1' &&
             pars->info[i][j] != '2' && pars->info[i][j] != '0') || verif > 1)
                 error_informations(pars);
             j++;
         }
+        if (verif2 == 0 && line_empty == 0)
+        {
+            verif2 = 1;
+            make_world_map(pars, copy_i, i);
+        }
+        line_empty = 0;
         i++;
         j = 0;
     }

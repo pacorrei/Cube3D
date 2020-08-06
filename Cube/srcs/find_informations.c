@@ -48,10 +48,6 @@ void    find_informations(t_parsing *pars)
     {
         while (pars->info[i][j] != '\0')
         {
-            //ft_putchar('a');
-            //printf("%c\n", pars->info[i][j]);
-            //printf("%d\n", i);
-            //printf("%d\n", j);
             if (verif == 0 && map_verif == 0 && (pars->info[i][j] == '1' ||
             pars->info[i][j] == '0' || pars->info[i][j] == '2'))
             {
@@ -90,7 +86,6 @@ void    find_informations(t_parsing *pars)
             }
             j++;
         }
-        //ft_putchar('b');
         i++;
         j = 0;
         verif = 0;

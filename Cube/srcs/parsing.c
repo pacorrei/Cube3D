@@ -15,6 +15,7 @@
 void    intit_struct_pars(t_parsing *pars)
 {
     pars->info = NULL;
+    pars->worldMap = NULL;
     pars->path_txt_no = NULL;
     pars->path_txt_so = NULL;
     pars->path_txt_we = NULL;
@@ -51,28 +52,25 @@ void    ft_realloc_map(t_parsing *pars, char *line)
 		free_char_double(copy);
 }
 
-void    recup_file(int fd)
+void    recup_file(int fd, t_parsing *pars)
 {
     char *line;
     int ret;
-    t_parsing pars;
 
-    intit_struct_pars(&pars);
-    pars.info = (char**)malloc(sizeof(char*) * 1);
-	pars.info[0] = NULL;
+    pars->info = (char**)malloc(sizeof(char*) * 1);
+	pars->info[0] = NULL;
     line = NULL;
     while ((ret = get_next_line(fd, &line)) > 0)
 	{
-        ft_realloc_map(&pars, line);
+        ft_realloc_map(pars, line);
 		free(line);
     }
     if (ret == -1)
     {
         free(line);
-        error_read_file(&pars);
+        error_read_file(pars);
     }
-    ft_realloc_map(&pars, line);
+    ft_realloc_map(pars, line);
     free(line);
-    find_informations(&pars);
-    free_char_double(pars.info);
+    find_informations(pars);
 }

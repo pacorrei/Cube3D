@@ -18,9 +18,11 @@
 # include <mlx.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <math.h>
 
 typedef struct  s_parsing{
     char    **info;
+    char    **worldMap;
     char    *path_txt_no;
     char    *path_txt_so;
     char    *path_txt_we;
@@ -35,11 +37,49 @@ typedef struct  s_parsing{
     int     r_floor;
     int     g_floor;
     int     b_floor;
+    double  dirX;
+    double  dirY;
+    double  posX;
+    double  posY;
+    double  planeX;
+    double  planeY;
+    int     x;
+    int     w;
+    int     h;
+    double  cameraX;
+    double  rayDirX;
+    double  rayDirY;
+    int     mapX;
+    int     mapY;
+    double  sideDistX;
+    double  sideDistY;
+    double  deltaDistX;
+    double  deltaDistY;
+    double  perpWallDist;
+    double  moveSpeed;
+    double  rotSpeed;
+    double  oldDirX;
+    double  oldPlaneX;
+    int     stepX;
+    int     stepY;
+    int     hit;
+    int     side;
+    int     lineHeight;
+    int     drawStart;
+    int     drawEnd;
+    void    *mlx;
+    void    *win;
+    void    *img;
+    char    *addr;
+    int     bits_per_pixel;
+    int     line_length;
+    int     endian;
 }                   t_parsing;
 
 void	free_char_double(char **str);
 void    ft_putchar(char c);
-void    recup_file(int fd);
+void    recup_file(int fd, t_parsing *pars);
+void    intit_struct_pars(t_parsing *pars);
 void	free_all(t_parsing *pars);
 void    error_informations(t_parsing *pars);
 void    error_argument();
@@ -62,6 +102,7 @@ void    identifiers_ea(t_parsing *pars, int i, int j);
 void    identifiers_s(t_parsing *pars, int i, int j);
 void    verif_valid_map(t_parsing *pars, int i, int j);
 void    verif_close_map(t_parsing *pars, int i, int j);
+void    raycasting(t_parsing *pars);
 
 
 #endif
