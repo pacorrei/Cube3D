@@ -1,5 +1,5 @@
-R 1000 720
-NO      ./srcs/brick.xpm
+R 1000 500
+NO      ./srcs/redbrick.xpm
 SO          ./srcs/eagle.xpm
 WE                          ./srcs/colorstone.xpm
 EA                                  ./srcs/brick.xpm

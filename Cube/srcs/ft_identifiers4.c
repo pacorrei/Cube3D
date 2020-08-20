@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_identifiers4.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacorrei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 12:05:54 by pacorrei          #+#    #+#             */
-/*   Updated: 2020/01/08 00:32:10 by pacorrei         ###   ########.fr       */
+/*   Updated: 2020/08/20 17:40:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	verif_path_we(t_parsing *pars, char *path)
 {
-    pars->texture_we = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
-    if (pars->texture_we == NULL)
+    pars->ptr_we = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
+    if (pars->ptr_we == NULL)
          error_informations(pars);
 }
 
@@ -71,8 +71,8 @@ void    identifiers_we(t_parsing *pars, int i, int j)
 
 void	verif_path_ea(t_parsing *pars, char *path)
 {
-    pars->texture_ea = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
-    if (pars->texture_ea == NULL)
+    pars->ptr_ea = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
+    if (pars->ptr_ea == NULL)
          error_informations(pars);
 }
 

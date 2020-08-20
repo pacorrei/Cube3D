@@ -256,9 +256,12 @@ int	main(int ac, char **av)
 
       //calculate value of wallX
       double wallX; //where exactly the wall was hit
-      if (pars->side == 0) wallX = pars->posY + pars->perpWallDist * pars->rayDirY;
-      else           wallX = pars->posX + pars->perpWallDist * pars->rayDirX;
+      if (pars->side == 0)
+	  	wallX = pars->posY + pars->perpWallDist * pars->rayDirY;
+      else
+	  	wallX = pars->posX + pars->perpWallDist * pars->rayDirX;
 
+	wallX -= floor(wallX);
       //x coordinate on the texture
       int texX = (int)(wallX * (double)(pars->tex_wight));
       if(pars->side == 0 && pars->rayDirX > 0)
@@ -267,21 +270,21 @@ int	main(int ac, char **av)
         texX = pars->tex_wight - texX - 1;
       
             // How much to increase the texture coordinate per screen pixel
-      double step = 1.0 *  pars->tex_height / pars->lineHeight;
+      double step = 1.0 *(double)pars->tex_height / (double)pars->lineHeight;
       // Starting texture coordinate
-      double texPos = (pars->drawStart - pars->h / 2 + pars->lineHeight / 2) * step;
-      while(pars->drawStart <pars->drawEnd)
+      double texPos = (double)(pars->drawStart - pars->h / 2 + pars->lineHeight / 2) * step;
+      while(pars->drawStart <= pars->drawEnd)
       {
-        // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-        int texY = (int)texPos & ( pars->tex_height - 1);
+        int texY = (int)texPos;
         texPos += step;
+		
+        // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+       pars->alpha = pars->addr_no[pars->line_length_no * texY + texX * 4];
+       pars->red = pars->addr_no[pars->line_length_no * texY + texX * 4 + 1];
+       pars->green = pars->addr_no[pars->line_length_no * texY + texX * 4 + 2];
+       pars->blue = pars->addr_no[pars->line_length_no * texY + texX * 4 + 3];
        // printf("tex height :%d\n", pars->tex_height);
-       // printf("TexY :%d\n", texY);
-       // printf("TexX :%d\n", texX);
-       pars->alpha = pars->texture_no[pars->tex_line_lenght * texY + texX * 4];
-       pars->red = pars->texture_no[pars->tex_line_lenght * texY + texX * 4 + 1];
-       pars->green = pars->texture_no[pars->tex_line_lenght * texY + texX * 4 + 2];
-       pars->blue = pars->texture_no[pars->tex_line_lenght * texY + texX * 4 + 3];
+	   //printf("%d %d\n", pars->drawStart, pars->drawEnd);
       
         //printf("color1 :%d\n", color);
         //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
@@ -293,5 +296,6 @@ int	main(int ac, char **av)
       }
       x++;
     }
+	printf("acualisation\n");
     mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
   }

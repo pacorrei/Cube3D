@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_identifiers5.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacorrei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 12:05:54 by pacorrei          #+#    #+#             */
-/*   Updated: 2020/01/08 00:32:10 by pacorrei         ###   ########.fr       */
+/*   Updated: 2020/08/20 17:40:29 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	verif_path_s(t_parsing *pars, char *path)
 {
-    pars->texture_s = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
-    if (pars->texture_s == NULL)
+    pars->ptr_s = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
+    if (pars->ptr_s == NULL)
          error_informations(pars);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cube.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacorrei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 13:43:56 by pacorrei          #+#    #+#             */
-/*   Updated: 2020/04/24 15:45:15 by pacorrei         ###   ########.fr       */
+/*   Updated: 2020/08/20 17:37:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,19 @@ typedef struct  s_parsing{
     void    *win;
     void    *img;
     char    *addr;
-    char    *texture_no;
-    char    *texture_so;
-    char    *texture_ea;
-    char    *texture_we;
-    char    *texture_s;
+    void    *ptr_no;
+    void    *ptr_so;
+    void    *ptr_ea;
+    void    *ptr_we;
+    void    *ptr_s;
+	char    *addr_no;
+    char    *addr_so;
+    char    *addr_ea;
+    char    *addr_we;
+    char    *addr_s;
+	int		line_length_no;
+	int		bits_per_pixel_no;
+	int		endian_no;
     unsigned char   alpha;
     unsigned char   red;
     unsigned char   green;

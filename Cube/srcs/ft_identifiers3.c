@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_identifiers3.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacorrei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/20 12:05:54 by pacorrei          #+#    #+#             */
-/*   Updated: 2020/01/08 00:32:10 by pacorrei         ###   ########.fr       */
+/*   Updated: 2020/08/20 17:39:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 void	verif_path_no(t_parsing *pars, char *path)
 {
-    pars->texture_no = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
-    if (pars->texture_no == NULL)
+    pars->ptr_no = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
+    if (pars->ptr_no == NULL)
          error_informations(pars);
+	pars->addr_no = mlx_get_data_addr(pars->ptr_no, &pars->bits_per_pixel_no,  &pars->line_length_no,  &pars->endian_no);
 }
 void    attribute_path_no(t_parsing *pars, int i, int j, int k)
 {
@@ -70,8 +71,8 @@ void    identifiers_no(t_parsing *pars, int i, int j)
 
 void	verif_path_so(t_parsing *pars, char *path)
 {
-    pars->texture_so = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
-    if (pars->texture_so == NULL)
+    pars->ptr_so = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
+    if (pars->ptr_so == NULL)
          error_informations(pars);
 }
 
