@@ -52,6 +52,8 @@ void    identifiers_r(t_parsing *pars, int i, int j)
             if (verif == 0 && pars->info[i][j] >= '0' && pars->info[i][j] <= '9')
             {
                 pars->res_x = find_nb(pars, i, j);
+                if (pars->res_x <= 0)
+                    error_informations(pars);
                 verif = 1;
                 while (pars->info[i][j] >= '0' && pars->info[i][j] <= '9' && pars->info[i][j + 1] != '\0')
                     j++;
@@ -59,6 +61,8 @@ void    identifiers_r(t_parsing *pars, int i, int j)
             if (verif == 1 && pars->info[i][j] >= '0' && pars->info[i][j] <= '9')
             {
                 pars->res_y = find_nb(pars, i, j);
+                 if (pars->res_y <= 0)
+                    error_informations(pars);
                 verif = 2;
                 while (pars->info[i][j] >= '0' && pars->info[i][j] <= '9' && pars->info[i][j + 1] != '\0')
                     j++;

@@ -12,6 +12,12 @@
 
 #include "ft_cube.h"
 
+void	verif_path_no(t_parsing *pars, char *path)
+{
+    pars->texture_no = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
+    if (pars->texture_no == NULL)
+         error_informations(pars);
+}
 void    attribute_path_no(t_parsing *pars, int i, int j, int k)
 {
     int l;
@@ -59,6 +65,14 @@ void    identifiers_no(t_parsing *pars, int i, int j)
         j++;
     }
     attribute_path_no(pars, i, j, k);
+    verif_path_no(pars, pars->path_txt_no);
+}
+
+void	verif_path_so(t_parsing *pars, char *path)
+{
+    pars->texture_so = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
+    if (pars->texture_so == NULL)
+         error_informations(pars);
 }
 
 void    attribute_path_so(t_parsing *pars, int i, int j, int k)
@@ -108,4 +122,5 @@ void    identifiers_so(t_parsing *pars, int i, int j)
         j++;  
     }
     attribute_path_so(pars, i, j, k);
+    verif_path_so(pars, pars->path_txt_so);
 }

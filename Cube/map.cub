@@ -1,20 +1,20 @@
-R 1000 580
-NO      ./path_to_the_north_texture
-SO          ./path_to_the_south_texture
-WE                          ./path_to_the_west_texture
-EA                                  ./path_to_the_east_texture
+R 1000 720
+NO      ./srcs/brick.xpm
+SO          ./srcs/eagle.xpm
+WE                          ./srcs/colorstone.xpm
+EA                                  ./srcs/brick.xpm
 
 
 
 
-S                           ./path_to_the_sprite_texture     
+S                           ./srcs/pillar.xpm 
 F 220,100,0
 C 225,30,0
 11111
 10001
-10S01
+10W001
 10001
-10001
+10101
 10001
 11111
 

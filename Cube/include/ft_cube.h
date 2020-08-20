@@ -71,6 +71,18 @@ typedef struct  s_parsing{
     void    *win;
     void    *img;
     char    *addr;
+    char    *texture_no;
+    char    *texture_so;
+    char    *texture_ea;
+    char    *texture_we;
+    char    *texture_s;
+    unsigned char   alpha;
+    unsigned char   red;
+    unsigned char   green;
+    unsigned char   blue;
+    int     tex_height;
+    int     tex_wight;
+    int     tex_line_lenght;
     int     bits_per_pixel;
     int     line_length;
     int     endian;

@@ -12,6 +12,13 @@
 
 #include "ft_cube.h"
 
+void	verif_path_s(t_parsing *pars, char *path)
+{
+    pars->texture_s = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
+    if (pars->texture_s == NULL)
+         error_informations(pars);
+}
+
 void    attribute_path_s(t_parsing *pars, int i, int j, int k)
 {
     int l;
@@ -59,4 +66,5 @@ void    identifiers_s(t_parsing *pars, int i, int j)
         j++;
     }
     attribute_path_s(pars, i, j, k);
+    verif_path_s(pars, pars->path_txt_s);
 }

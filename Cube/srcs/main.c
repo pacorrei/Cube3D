@@ -9,14 +9,14 @@ void vector_dir_value(t_parsing *pars)
     pars->planeX = 0.66;
     pars->planeY = 0;
 	}
-	if (pars->pos_player == 'S')
+	if (pars->pos_player == 'E')
 	{
 		pars->dirX = 0;
 		pars->dirY = 1;
     pars->planeX = -0.66;
     pars->planeY = 0;
 	}
-	if (pars->pos_player == 'E')
+	if (pars->pos_player == 'S')
 	{
 		pars->dirX = 1;
 		pars->dirY = 0;
@@ -32,15 +32,41 @@ void vector_dir_value(t_parsing *pars)
 	}
 }
 
+void            decalage_bit(t_parsing *pars, int color)
+{
+    int copy;
+
+    copy = color & 0xFF0000;
+    pars->red = copy >> 16;
+    copy = color & 0x00FF00;
+    pars->green = copy >> 8;
+    copy = color & 0xFF;
+    pars->blue = color;
+    copy = color & 0xFF000000;
+    pars->alpha = color >> 24;
+}
+
 void            my_mlx_pixel_put(t_parsing *pars, int x, int y, int color)
 {
     int pos;
 
+    //printf("color :%d\n", color);
     pos = (x * 4 + y * pars->line_length);
-    pars->addr [pos + 0] = color;
-    pars->addr [pos + 1] = color;
-    pars->addr [pos + 2] = color;
-    pars->addr [pos + 3] = color;
+    //decalage_bit(pars, color);
+    if (color == 255)
+    {
+      pars->addr [pos + 0] = pars->alpha;
+      pars->addr [pos + 1] = pars->red;
+      pars->addr [pos + 2] = pars->green;
+      pars->addr [pos + 3] = pars->blue;
+    }
+    else
+    {
+      pars->addr [pos + 0] = color;
+      pars->addr [pos + 1] = color;
+      pars->addr [pos + 2] = color;
+      pars->addr [pos + 3] = color;
+    }
 }
 void  clean_screen(t_parsing *pars, int x_max, int y_max)
 {
@@ -86,7 +112,7 @@ int             key_action(int keycode, t_parsing *pars)
       if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->dirY * pars->moveSpeed)] != '1')
         pars->posY -= pars->dirY * pars->moveSpeed;
     }
-    if (keycode == 113)
+    if (keycode == 100)
     {
       pars->oldDirX = pars->dirX;
       pars->dirX = pars->dirX * cos(pars->rotSpeed) - pars->dirY * sin(pars->rotSpeed);
@@ -95,7 +121,7 @@ int             key_action(int keycode, t_parsing *pars)
       pars->planeX = pars->planeX * cos(pars->rotSpeed) - pars->planeY * sin(pars->rotSpeed);
       pars->planeY = pars->oldPlaneX * sin(pars->rotSpeed) + pars->planeY * cos(pars->rotSpeed);
     }
-    if (keycode == 100)
+    if (keycode == 113)
     {
       pars->oldDirX = pars->dirX;
       pars->dirX = pars->dirX * cos(-pars->rotSpeed) - pars->dirY * sin(-pars->rotSpeed);
@@ -114,6 +140,9 @@ int	main(int ac, char **av)
 	int fd;
 	t_parsing pars;
 
+  	pars.mlx = mlx_init();
+    pars.tex_height = 64;
+    pars.tex_wight = 64;
     intit_struct_pars(&pars);
 	fd = open(av[1], O_RDONLY);
 	if (ac == 1 || ac > 3)
@@ -127,9 +156,9 @@ int	main(int ac, char **av)
 
   pars.w = pars.res_x;
   pars.h = pars.res_y;
-  pars.moveSpeed = 0.3;
-  pars.rotSpeed = 0.5;
-  	pars.mlx = mlx_init();
+  pars.tex_line_lenght = pars.tex_wight * 4;
+  pars.moveSpeed = 0.2;
+  pars.rotSpeed = 0.1;
     pars.win = mlx_new_window(pars.mlx, pars.res_x, pars.res_y, "Cube3D");
     pars.img = mlx_new_image(pars.mlx, pars.res_x, pars.res_y);
     pars.addr = mlx_get_data_addr(pars.img, &pars.bits_per_pixel, &pars.line_length, &pars.endian);
@@ -143,7 +172,7 @@ int	main(int ac, char **av)
   {
     int x;
     x = 0;
-    printf("Hello\n");
+   // int  buffer[pars->res_y][pars->res_x];
     clean_screen(pars, pars->res_x, pars->res_y);
     while(x < pars->w)
     {
@@ -221,12 +250,44 @@ int	main(int ac, char **av)
       if(pars->drawEnd >= pars->h)
         pars->drawEnd = pars->h - 1;
 
-      //printf("start; %d\n", pars->drawStart);
-       //printf("end; %d\n", pars->drawEnd);
-       //printf("h; %d\n", pars->h);
-       //printf("line; %d\n", pars->lineHeight);
-      while (pars->drawStart < pars->drawEnd)
+
+      //texturing calculations
+      //int texNum = 1; //1 subtracted from it so that texture 0 can be used!
+
+      //calculate value of wallX
+      double wallX; //where exactly the wall was hit
+      if (pars->side == 0) wallX = pars->posY + pars->perpWallDist * pars->rayDirY;
+      else           wallX = pars->posX + pars->perpWallDist * pars->rayDirX;
+
+      //x coordinate on the texture
+      int texX = (int)(wallX * (double)(pars->tex_wight));
+      if(pars->side == 0 && pars->rayDirX > 0)
+        texX = pars->tex_wight - texX - 1;
+      if(pars->side == 1 && pars->rayDirY < 0)
+        texX = pars->tex_wight - texX - 1;
+      
+            // How much to increase the texture coordinate per screen pixel
+      double step = 1.0 *  pars->tex_height / pars->lineHeight;
+      // Starting texture coordinate
+      double texPos = (pars->drawStart - pars->h / 2 + pars->lineHeight / 2) * step;
+      while(pars->drawStart <pars->drawEnd)
       {
+        // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+        int texY = (int)texPos & ( pars->tex_height - 1);
+        texPos += step;
+       // printf("tex height :%d\n", pars->tex_height);
+       // printf("TexY :%d\n", texY);
+       // printf("TexX :%d\n", texX);
+       pars->alpha = pars->texture_no[pars->tex_line_lenght * texY + texX * 4];
+       pars->red = pars->texture_no[pars->tex_line_lenght * texY + texX * 4 + 1];
+       pars->green = pars->texture_no[pars->tex_line_lenght * texY + texX * 4 + 2];
+       pars->blue = pars->texture_no[pars->tex_line_lenght * texY + texX * 4 + 3];
+      
+        //printf("color1 :%d\n", color);
+        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+        //if(pars->side == 1) color = (color >> 1) & 8355711;
+       // printf("color2 :%d\n", color);
+        //buffer[y][x] = color;
         my_mlx_pixel_put(pars, x, pars->drawStart, 255);
         pars->drawStart++;
       }

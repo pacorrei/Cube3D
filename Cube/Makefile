@@ -27,9 +27,10 @@ SRCS = $(addprefix $(SRCS_PATH), $(SRCS_NAME))
 OBJS = $(addprefix $(OBJS_PATH), $(OBJS_NAME))
 
 $(OBJS_PATH)%.o: $(SRCS_PATH)%.c
+	mkdir $(OBJS_PATH) 2> /dev/null || true
 	gcc -c $(FLAGS) $(HEAD) -o $@ -c $<
 
-$(NAME):	${OBJS}
+$(NAME):  ${OBJS}
 		${CC} ${CFLAGS} ${SRCS} ${HEAD} -o ${NAME}
 
 clean:
