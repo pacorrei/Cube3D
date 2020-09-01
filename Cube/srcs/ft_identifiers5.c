@@ -17,6 +17,7 @@ void	verif_path_s(t_parsing *pars, char *path)
     pars->ptr_s = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
     if (pars->ptr_s == NULL)
          error_informations(pars);
+	pars->addr_s = mlx_get_data_addr(pars->ptr_s, &pars->bits_per_pixel_s,  &pars->line_length_s,  &pars->endian_s);
 }
 
 void    attribute_path_s(t_parsing *pars, int i, int j, int k)

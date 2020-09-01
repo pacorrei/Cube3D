@@ -45,3 +45,10 @@ void    error_read_file(t_parsing *pars)
     free_all(pars);
     exit(1);
 }
+
+void    error_bmp_file(t_parsing *pars)
+{
+    ft_putstr("Error failed create/write bmp file");
+    free_all(pars);
+    exit(1);
+}

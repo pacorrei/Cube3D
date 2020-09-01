@@ -17,6 +17,7 @@ void	verif_path_we(t_parsing *pars, char *path)
     pars->ptr_we = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
     if (pars->ptr_we == NULL)
          error_informations(pars);
+	pars->addr_we = mlx_get_data_addr(pars->ptr_we, &pars->bits_per_pixel_we,  &pars->line_length_we,  &pars->endian_we);
 }
 
 void    attribute_path_we(t_parsing *pars, int i, int j, int k)
@@ -74,6 +75,7 @@ void	verif_path_ea(t_parsing *pars, char *path)
     pars->ptr_ea = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
     if (pars->ptr_ea == NULL)
          error_informations(pars);
+	pars->addr_ea = mlx_get_data_addr(pars->ptr_ea, &pars->bits_per_pixel_ea,  &pars->line_length_ea,  &pars->endian_ea);
 }
 
 void    attribute_path_ea(t_parsing *pars, int i, int j, int k)

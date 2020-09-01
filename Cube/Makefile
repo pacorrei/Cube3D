@@ -19,6 +19,7 @@ SRCS_NAME = parsing.c find_informations.c free_utils.c ft_cube_utils.c \
 	    ft_error.c ft_identifiers.c ft_identifiers2.c get_next_line.c \
 	    get_next_line_utils.c verif_argument.c main.c ft_identifiers3.c \
 		ft_identifiers4.c ft_identifiers5.c verif_valid_map.c \
+		make_bmp.c \
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
 

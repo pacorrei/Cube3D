@@ -25,6 +25,20 @@ void	free_char_double(char **str)
 	free(str);
 }
 
+void	free_int_double(int **str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] != NULL)
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str[i]);
+	free(str);
+}
+
 void	free_all(t_parsing *pars)
 {
 	if (pars->info != NULL)
@@ -41,4 +55,10 @@ void	free_all(t_parsing *pars)
 		free(pars->path_txt_ea);
 	if (pars->path_txt_s != NULL)
 		free(pars->path_txt_s);
+	if (pars->sprite_dist != NULL)
+		free(pars->sprite_dist);
+	if (pars->sprite_order != NULL)
+		free(pars->sprite_order);
+	if (pars->pos_sprite != NULL)
+		free_int_double(pars->pos_sprite);	
 }

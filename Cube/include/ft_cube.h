@@ -46,6 +46,8 @@ typedef struct  s_parsing{
     int     x;
     int     w;
     int     h;
+    int     screen_x;
+    int     screen_y;
     double  cameraX;
     double  rayDirX;
     double  rayDirY;
@@ -63,10 +65,16 @@ typedef struct  s_parsing{
     int     stepX;
     int     stepY;
     int     hit;
+    int     key;
     int     side;
     int     lineHeight;
     int     drawStart;
     int     drawEnd;
+    int     nb_sprite;
+    int     **pos_sprite;
+    int     *sprite_dist;
+    int     *sprite_order;
+    double     *z_buffer;
     void    *mlx;
     void    *win;
     void    *img;
@@ -81,9 +89,23 @@ typedef struct  s_parsing{
     char    *addr_ea;
     char    *addr_we;
     char    *addr_s;
+    char    *addr_tex;
+    int		line_length_tex;
 	int		line_length_no;
+    int		line_length_so;
+    int		line_length_ea;
+    int		line_length_we;
+    int		line_length_s;
 	int		bits_per_pixel_no;
+    int		bits_per_pixel_so;
+    int		bits_per_pixel_ea;
+    int		bits_per_pixel_we;
+    int		bits_per_pixel_s;
 	int		endian_no;
+    int		endian_so;
+    int		endian_ea;
+    int		endian_we;
+    int		endian_s;
     unsigned char   alpha;
     unsigned char   red;
     unsigned char   green;
@@ -94,6 +116,7 @@ typedef struct  s_parsing{
     int     bits_per_pixel;
     int     line_length;
     int     endian;
+    int     save;
 }                   t_parsing;
 
 void	free_char_double(char **str);
@@ -123,6 +146,10 @@ void    identifiers_s(t_parsing *pars, int i, int j);
 void    verif_valid_map(t_parsing *pars, int i, int j);
 void    verif_close_map(t_parsing *pars, int i, int j);
 void    raycasting(t_parsing *pars);
+void    sort_sprites(t_parsing *pars);
+void    find_sprite_pos(t_parsing *pars);
+void    make_bmp(t_parsing *pars);
+void    error_bmp_file(t_parsing *pars);
 
 
 #endif

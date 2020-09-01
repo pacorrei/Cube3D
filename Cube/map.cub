@@ -1,22 +1,23 @@
-R 1000 500
-NO      ./srcs/redbrick.xpm
+R 1000  720
+NO      ./srcs/bluestone.xpm
 SO          ./srcs/eagle.xpm
 WE                          ./srcs/colorstone.xpm
-EA                                  ./srcs/brick.xpm
+EA                                  ./srcs/redbrick.xpm
 
 
 
 
 S                           ./srcs/pillar.xpm 
 F 220,100,0
-C 225,30,0
-11111
-10001
-10W001
-10001
-10101
-10001
-11111
+C 135,206,235
+111111111
+1000000001111
+10N0000000201
+1000222001111
+1000002001
+1000000001
+1020000001
+1111111111
 
 
 

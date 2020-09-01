@@ -72,4 +72,9 @@ void    identifiers_r(t_parsing *pars, int i, int j)
     }
     if (verif == 0 || verif == 1)
         error_miss_informations(pars);
+    mlx_get_screen_size(pars->mlx, &pars->screen_x, &pars->screen_y);
+    if (pars->res_x > pars->screen_x)
+        pars->res_x = pars->screen_x;
+    if (pars->res_y > pars->screen_y)
+        pars->res_y = pars->screen_y;
 }
