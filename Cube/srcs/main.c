@@ -238,50 +238,56 @@ int             window_action(t_parsing *pars)
   exit(0);
 }
 
-int             key_release(t_parsing *pars)
+int             key_pressed(int keycode, t_parsing *pars)
 {
-  pars->key = 0;
+  pars->key = keycode;
   return (0);
 }
 
-int             key_action(int keycode, t_parsing *pars)
+int             key_release(int keycode, t_parsing *pars)
 {
-  pars->key = 1;
-  if (keycode == 65307)
+  pars->key = 0;
+  (void)keycode;
+  return (0);
+}
+
+int             key_action(t_parsing *pars)
+{
+  if (pars->key == 65307)
   {
         mlx_destroy_window(pars->mlx, pars->win);
         free_all(pars);
         exit(0);
   }
-  if (keycode == 100 && pars->key == 1)
+  if (pars->key == 100)
   {
     if(pars->worldMap[(int)(pars->posX + pars->planeX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX += pars->planeX * pars->moveSpeed;
     if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->planeY * pars->moveSpeed)] != '1')
         pars->posY += pars->planeY * pars->moveSpeed;
   }
-  if (keycode == 113 && pars->key == 1)
+  if (pars->key == 113)
   {
     if(pars->worldMap[(int)(pars->posX - pars->planeX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX -= pars->planeX * pars->moveSpeed;
     if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->planeY * pars->moveSpeed)] != '1')
         pars->posY -= pars->planeY * pars->moveSpeed;
   }
-    if (keycode == 122 && pars->key == 1)
+    if (pars->key == 122)
     {
       if(pars->worldMap[(int)(pars->posX + pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX += pars->dirX * pars->moveSpeed;
       if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->dirY * pars->moveSpeed)] != '1')
         pars->posY += pars->dirY * pars->moveSpeed; 
     }
-    if (keycode == 115 && pars->key == 1)
+    if (pars->key == 115)
     {
       if(pars->worldMap[(int)(pars->posX - pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX -= pars->dirX * pars->moveSpeed;
       if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->dirY * pars->moveSpeed)] != '1')
         pars->posY -= pars->dirY * pars->moveSpeed;
     }
-    if (keycode == 65363 && pars->key == 1)
+    if (pars->key == 65363)
     {
       pars->oldDirX = pars->dirX;
       pars->dirX = pars->dirX * cos(pars->rotSpeed) - pars->dirY * sin(pars->rotSpeed);
@@ -290,7 +296,7 @@ int             key_action(int keycode, t_parsing *pars)
       pars->planeX = pars->planeX * cos(pars->rotSpeed) - pars->planeY * sin(pars->rotSpeed);
       pars->planeY = pars->oldPlaneX * sin(pars->rotSpeed) + pars->planeY * cos(pars->rotSpeed);
     }
-    if (keycode == 65361 && pars->key == 1)
+    if (pars->key == 65361)
     {
       pars->oldDirX = pars->dirX;
       pars->dirX = pars->dirX * cos(-pars->rotSpeed) - pars->dirY * sin(-pars->rotSpeed);
@@ -299,7 +305,7 @@ int             key_action(int keycode, t_parsing *pars)
       pars->planeX = pars->planeX * cos(-pars->rotSpeed) - pars->planeY * sin(-pars->rotSpeed);
       pars->planeY = pars->oldPlaneX * sin(-pars->rotSpeed) + pars->planeY * cos(-pars->rotSpeed);
     }
-    raycasting(pars);
+      raycasting(pars);
     return (0);
 }
 
@@ -336,9 +342,10 @@ int	main(int ac, char **av)
     pars.img = mlx_new_image(pars.mlx, pars.res_x, pars.res_y);
     pars.addr = mlx_get_data_addr(pars.img, &pars.bits_per_pixel, &pars.line_length, &pars.endian);
 	  raycasting(&pars);
-    mlx_hook(pars.win, 2, 1L<<0, key_action, &pars);
-   // mlx_hook(pars.win, 3, 2L, key_release, &pars);
-    mlx_hook(pars.win, 17, 1L<<17, window_action, &pars);
+    mlx_loop_hook(pars.mlx, key_action, &pars);
+    mlx_hook(pars.win, 2, 1L<<0, key_pressed, &pars);
+    mlx_hook(pars.win, 3, 1L<<1, key_release, &pars);
+    mlx_hook(pars.win, 33, 1L<<17, window_action, &pars);
     mlx_loop(pars.mlx);
 }
   
