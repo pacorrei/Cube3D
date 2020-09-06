@@ -29,6 +29,8 @@ typedef struct  s_parsing{
     char    *path_txt_ea;
     char    *path_txt_s;
     char    pos_player;
+    int     verif;
+    int     map_verif;
     int     res_x;
     int     res_y;
     int     r_ceil;
@@ -106,6 +108,13 @@ typedef struct  s_parsing{
     int		endian_ea;
     int		endian_we;
     int		endian_s;
+    int     key_s;
+    int     key_z;
+    int     key_q;
+    int     key_d;
+    int     key_right;
+    int     key_left;
+    int     key_echap;
     unsigned char   alpha;
     unsigned char   red;
     unsigned char   green;
@@ -150,6 +159,11 @@ void    sort_sprites(t_parsing *pars);
 void    find_sprite_pos(t_parsing *pars);
 void    make_bmp(t_parsing *pars);
 void    error_bmp_file(t_parsing *pars);
-
+void    error_write_bmp(t_parsing *pars);
+void	verif_path_no(t_parsing *pars, char *path);
+void	verif_path_so(t_parsing *pars, char *path);
+void	verif_path_ea(t_parsing *pars, char *path);
+void	verif_path_we(t_parsing *pars, char *path);
+void	verif_path_s(t_parsing *pars, char *path);
 
 #endif

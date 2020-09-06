@@ -12,118 +12,100 @@
 
 #include "ft_cube.h"
 
-void	verif_path_we(t_parsing *pars, char *path)
+void	attribute_path_we(t_parsing *pars, int i, int j, int k)
 {
-    pars->ptr_we = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
-    if (pars->ptr_we == NULL)
-         error_informations(pars);
-	pars->addr_we = mlx_get_data_addr(pars->ptr_we, &pars->bits_per_pixel_we,  &pars->line_length_we,  &pars->endian_we);
+	int l;
+
+	if (!(pars->path_txt_we = malloc(sizeof(char) * (k + 1))))
+		error_malloc(pars);
+	pars->path_txt_we[k] = '\0';
+	l = k - 1;
+	j = 0;
+	k = 0;
+	while (pars->info[i][j] != '.')
+		j++;
+	while (l >= 0)
+	{
+		pars->path_txt_we[k] = pars->info[i][j];
+		k++;
+		j++;
+		l--;
+	}
 }
 
-void    attribute_path_we(t_parsing *pars, int i, int j, int k)
+void	identifiers_we(t_parsing *pars, int i, int j)
 {
-    int l;
+	int k;
 
-    if (!(pars->path_txt_we = malloc(sizeof(char) * (k + 1))))
-        error_malloc(pars);
-    pars->path_txt_we[k] = '\0';
-    l = k - 1;
-    j = 0;
-    k = 0;
-    while (pars->info[i][j] != '.')
-        j++;
-    while (l >= 0)
-    {
-        pars->path_txt_we[k] = pars->info[i][j];
-        k++;
-        j++;
-        l--;
-    }
-     printf("we ;%s\n", pars->path_txt_we);
+	k = 0;
+	if (pars->path_txt_we != NULL)
+		error_informations(pars);
+	while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
+	{
+		if (pars->info[i][j] != ' ')
+			error_informations(pars);
+		j++;
+	}
+	while (pars->info[i][j] != ' ' && pars->info[i][j] != '\0')
+	{
+		j++;
+		k++;
+	}
+	while (pars->info[i][j] != '\0')
+	{
+		if (pars->info[i][j] != ' ')
+			error_informations(pars);
+		j++;
+	}
+	attribute_path_we(pars, i, j, k);
+	verif_path_we(pars, pars->path_txt_we);
 }
 
-void    identifiers_we(t_parsing *pars, int i, int j)
+void	attribute_path_ea(t_parsing *pars, int i, int j, int k)
 {
-    int k;
+	int l;
 
-    k = 0;
-    if (pars->path_txt_we != NULL)
-        error_informations(pars);
-    while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
-    {
-        if (pars->info[i][j] != ' ')
-            error_informations(pars);
-       j++;
-    }
-    while (pars->info[i][j] != ' ' && pars->info[i][j] != '\0')
-    {
-        j++;
-        k++;
-    }
-    while (pars->info[i][j] != '\0')
-    {
-        if (pars->info[i][j] != ' ')
-          error_informations(pars);
-        j++;
-    }
-    attribute_path_we(pars, i, j, k);
-    verif_path_we(pars, pars->path_txt_we);
+	if (!(pars->path_txt_ea = malloc(sizeof(char) * (k + 1))))
+		error_malloc(pars);
+	pars->path_txt_ea[k] = '\0';
+	l = k - 1;
+	j = 0;
+	k = 0;
+	while (pars->info[i][j] != '.')
+		j++;
+	while (l >= 0)
+	{
+		pars->path_txt_ea[k] = pars->info[i][j];
+		k++;
+		j++;
+		l--;
+	}
 }
 
-void	verif_path_ea(t_parsing *pars, char *path)
+void	identifiers_ea(t_parsing *pars, int i, int j)
 {
-    pars->ptr_ea = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
-    if (pars->ptr_ea == NULL)
-         error_informations(pars);
-	pars->addr_ea = mlx_get_data_addr(pars->ptr_ea, &pars->bits_per_pixel_ea,  &pars->line_length_ea,  &pars->endian_ea);
-}
+	int k;
 
-void    attribute_path_ea(t_parsing *pars, int i, int j, int k)
-{
-    int l;
-
-    if (!(pars->path_txt_ea = malloc(sizeof(char) * (k + 1))))
-        error_malloc(pars);
-    pars->path_txt_ea[k] = '\0';
-    l = k - 1;
-    j = 0;
-    k = 0;
-    while (pars->info[i][j] != '.')
-        j++;
-    while (l >= 0)
-    {
-        pars->path_txt_ea[k] = pars->info[i][j];
-        k++;
-        j++;
-        l--;
-    }
-     printf("ea ;%s\n", pars->path_txt_ea);
-}
-
-void    identifiers_ea(t_parsing *pars, int i, int j)
-{
-    int k;
-
-    k = 0;
-    if (pars->path_txt_ea != NULL)
-        error_informations(pars);
-    while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
-    {
-        if (pars->info[i][j] != ' ')
-            error_informations(pars);
-       j++;
-    }
-    while (pars->info[i][j] != ' ' && pars->info[i][j] != '\0')
-    {
-        j++;
-        k++;
-    }
-    while (pars->info[i][j] != '\0')
-    {
-        if (pars->info[i][j] != ' ')
-          error_informations(pars);
-        j++; 
-    }
-    attribute_path_ea(pars, i, j, k);
-    verif_path_ea(pars, pars->path_txt_ea);
+	k = 0;
+	if (pars->path_txt_ea != NULL)
+		error_informations(pars);
+	while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
+	{
+		if (pars->info[i][j] != ' ')
+			error_informations(pars);
+		j++;
+	}
+	while (pars->info[i][j] != ' ' && pars->info[i][j] != '\0')
+	{
+		j++;
+		k++;
+	}
+	while (pars->info[i][j] != '\0')
+	{
+		if (pars->info[i][j] != ' ')
+			error_informations(pars);
+		j++;
+	}
+	attribute_path_ea(pars, i, j, k);
+	verif_path_ea(pars, pars->path_txt_ea);
 }

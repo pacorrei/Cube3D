@@ -12,60 +12,51 @@
 
 #include "ft_cube.h"
 
-void	verif_path_s(t_parsing *pars, char *path)
+void	attribute_path_s(t_parsing *pars, int i, int j, int k)
 {
-    pars->ptr_s = mlx_xpm_file_to_image(pars->mlx, path, &pars->tex_height, &pars->tex_wight);
-    if (pars->ptr_s == NULL)
-         error_informations(pars);
-	pars->addr_s = mlx_get_data_addr(pars->ptr_s, &pars->bits_per_pixel_s,  &pars->line_length_s,  &pars->endian_s);
+	int l;
+
+	if (!(pars->path_txt_s = malloc(sizeof(char) * (k + 1))))
+		error_malloc(pars);
+	pars->path_txt_s[k] = '\0';
+	l = k - 1;
+	j = 0;
+	k = 0;
+	while (pars->info[i][j] != '.')
+		j++;
+	while (l >= 0)
+	{
+		pars->path_txt_s[k] = pars->info[i][j];
+		k++;
+		j++;
+		l--;
+	}
 }
 
-void    attribute_path_s(t_parsing *pars, int i, int j, int k)
+void	identifiers_s(t_parsing *pars, int i, int j)
 {
-    int l;
+	int k;
 
-    if (!(pars->path_txt_s = malloc(sizeof(char) * (k + 1))))
-        error_malloc(pars);
-    pars->path_txt_s[k] = '\0';
-    l = k - 1;
-    j = 0;
-    k = 0;
-    while (pars->info[i][j] != '.')
-        j++;
-    while (l >= 0)
-    {
-        pars->path_txt_s[k] = pars->info[i][j];
-        k++;
-        j++;
-        l--;
-    }
-     printf("s ;%s\n", pars->path_txt_s);
-}
-
-void    identifiers_s(t_parsing *pars, int i, int j)
-{
-    int k;
-
-    k = 0;
-    if (pars->path_txt_s != NULL)
-        error_informations(pars);
-    while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
-    {
-        if (pars->info[i][j] != ' ')
-            error_informations(pars);
-       j++;
-    }
-    while (pars->info[i][j] != ' ' && pars->info[i][j] != '\0')
-    {
-        j++;
-        k++;
-    }
-    while (pars->info[i][j] != '\0')
-    {
-        if (pars->info[i][j] != ' ')
-          error_informations(pars);
-        j++;
-    }
-    attribute_path_s(pars, i, j, k);
-    verif_path_s(pars, pars->path_txt_s);
+	k = 0;
+	if (pars->path_txt_s != NULL)
+		error_informations(pars);
+	while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
+	{
+		if (pars->info[i][j] != ' ')
+			error_informations(pars);
+		j++;
+	}
+	while (pars->info[i][j] != ' ' && pars->info[i][j] != '\0')
+	{
+		j++;
+		k++;
+	}
+	while (pars->info[i][j] != '\0')
+	{
+		if (pars->info[i][j] != ' ')
+			error_informations(pars);
+		j++;
+	}
+	attribute_path_s(pars, i, j, k);
+	verif_path_s(pars, pars->path_txt_s);
 }

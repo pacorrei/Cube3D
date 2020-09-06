@@ -1,98 +1,83 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_bmp.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pacorrei <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/11/20 12:05:54 by pacorrei          #+#    #+#             */
+/*   Updated: 2020/01/08 00:32:10 by pacorrei         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_cube.h"
 
+void	binary_shift(unsigned char *str, int value)
+{
+	str[0] = (unsigned char)(value);
+	str[1] = (unsigned char)(value >> 8);
+	str[2] = (unsigned char)(value >> 16);
+	str[3] = (unsigned char)(value >> 24);
+}
 
-void	write_pixel_color(t_parsing *pars, int fd, int reste)
+int		ft_write_in_file_header(int fd, int nbr, t_parsing *pars)
+{
+	unsigned char	header[54];
+	int				i;
+
+	i = 0;
+	while (i < 54)
+		header[i++] = (unsigned char)0;
+	header[0] = (unsigned char)('B');
+	header[1] = (unsigned char)('M');
+	binary_shift(header + 2, nbr);
+	header[10] = (unsigned char)(54);
+	header[14] = (unsigned char)(40);
+	binary_shift(header + 18, pars->res_x);
+	binary_shift(header + 22, pars->res_y);
+	header[27] = (unsigned char)(1);
+	header[28] = (unsigned char)(24);
+	return (!(write(fd, header, 54) < 0));
+}
+
+int		get_color(t_parsing *pars, int x, int y)
+{
+	return (*(int*)(pars->addr + ((x + (y * pars->res_x)) *
+	(pars->bits_per_pixel / 8))));
+}
+
+int		ft_write_in_file_img(int fd, t_parsing *pars)
 {
 	int x;
 	int y;
-	int verif;
+	int	color;
 
-	y = pars->w;
+	y = pars->res_y;
 	while (y > 0)
 	{
 		x = 0;
-		verif = 1;
-		ft_putchar('a');
-		while (x < pars->h)
+		while (x < pars->res_x)
 		{
-			if (reste != 0 && verif == 1)
-		{
-			write(fd, "\0", reste);
-			verif = 0;
-		}
-			ft_putchar('b');
-			pars->alpha = pars->addr [(x * 4 + y * pars->line_length) + 0];
-			write(fd, &pars->alpha, 1);
-			ft_putchar('c');
-			pars->red = pars->addr [(x * 4 + y * pars->line_length) + 1];
-			write(fd, &pars->red, 1);
-			pars->green = pars->addr [(x * 4 + y * pars->line_length) + 2];
-			write(fd, &pars->green, 1);
-			pars->blue = pars->addr [(x * 4 + y * pars->line_length) + 3];
-			write(fd, &pars->blue, 1);
+			color = get_color(pars, x, y);
+			if (write(fd, &color, 3) < 0)
+				return (0);
 			x++;
 		}
 		y--;
 	}
-}
-
-void	write_info_header(t_parsing *pars, int fd, int reste)
-{
-	int hsize;
-	int plane;
-	int color;
-	int	isize;
-	int nbcolor;
-
-	hsize = 40;
-	plane = 1;
-	color = 32;
-	isize = (pars->h * (pars->w + reste)) * 4;
-	nbcolor = 0;
-	write(fd, &hsize, 4);
-	write(fd, &pars->w + reste, 4);
-	write(fd, &pars->h, 4);
-	write(fd, &plane, 2);
-	write(fd, &color, 2);
-	write(fd, "\0\0\0\0", 4);
-	write(fd, &isize, 4);
-	write(fd, &pars->w, 4);
-	write(fd, &pars->h, 4);
-	write(fd, &nbcolor, 4);
-  	write(fd, &nbcolor, 4);
-}
-
-void	write_header(t_parsing *pars, int fd, int reste)
-{
-	int fsize;
-	int toto = 14 + 40;
-
-	fsize = 14 + 40 + ((pars->h * (pars->w + reste)) * 4);
-	write(fd, "BM", 2);
-	write(fd, &fsize, 4);
-	//printf("decimal %d hexa %x\n", fsize, fsize);
-	write(fd, "\0\0\0\0", 4);
-	write(fd, &toto, 4);
+	return (1);
 }
 
 void	make_bmp(t_parsing *pars)
 {
 	int fd;
-	int reste;
 
-	reste = 0;
-	fd = open("cube.bmp", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU | S_IRWXG | S_IRWXO);
+	fd = open("cube.bmp", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU |
+	S_IRWXG | S_IRWXO);
 	if (fd == -1)
 		error_bmp_file(pars);
-	//printf(" fd ;%d x : %d y : %d\n", fd, pars->res_x, pars->res_y);
-	if (pars->res_x % 4 != 0)
-		reste = pars->res_x % 4;
-	ft_putchar('1');
-	write_header(pars, fd, reste);
-	ft_putchar('2');
-	write_info_header(pars, fd, reste);
-	ft_putchar('3');
-	write_pixel_color(pars, fd, reste);
-	ft_putchar('4');
+	ft_write_in_file_header(fd, 54 + (pars->res_x * pars->res_y), pars);
+	if (ft_write_in_file_img(fd, pars) == 0)
+		error_write_bmp(pars);
 	close(fd);
 }

@@ -240,54 +240,77 @@ int             window_action(t_parsing *pars)
 
 int             key_pressed(int keycode, t_parsing *pars)
 {
-  pars->key = keycode;
+  if (keycode == 100)
+    pars->key_d = 1;
+  if (keycode == 113)
+    pars->key_q = 1;
+  if (keycode == 122)
+    pars->key_z = 1;
+  if (keycode == 115)
+    pars->key_s = 1;
+  if (keycode == 65363)
+    pars->key_right = 1;
+  if (keycode == 65361)
+    pars->key_left = 1;
+  if (keycode == 65307)
+    pars->key_echap = 1;
   return (0);
 }
 
 int             key_release(int keycode, t_parsing *pars)
 {
-  pars->key = 0;
+  pars->key_z = 0;
+  pars->key_q = 0;
+  pars->key_s = 0;
+  pars->key_d = 0;
+  pars->key_right = 0;
+  pars->key_left = 0;
+  pars->key_echap = 0;
   (void)keycode;
   return (0);
 }
 
 int             key_action(t_parsing *pars)
 {
-  if (pars->key == 65307)
+  if (pars->key_echap == 1)
   {
         mlx_destroy_window(pars->mlx, pars->win);
         free_all(pars);
         exit(0);
   }
-  if (pars->key == 100)
+  if (pars->key_d == 1)
   {
     if(pars->worldMap[(int)(pars->posX + pars->planeX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX += pars->planeX * pars->moveSpeed;
     if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->planeY * pars->moveSpeed)] != '1')
         pars->posY += pars->planeY * pars->moveSpeed;
+    raycasting(pars);
   }
-  if (pars->key == 113)
+  if (pars->key_q == 1)
   {
     if(pars->worldMap[(int)(pars->posX - pars->planeX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX -= pars->planeX * pars->moveSpeed;
     if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->planeY * pars->moveSpeed)] != '1')
         pars->posY -= pars->planeY * pars->moveSpeed;
+    raycasting(pars);
   }
-    if (pars->key == 122)
+    if (pars->key_z == 1)
     {
       if(pars->worldMap[(int)(pars->posX + pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX += pars->dirX * pars->moveSpeed;
       if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->dirY * pars->moveSpeed)] != '1')
-        pars->posY += pars->dirY * pars->moveSpeed; 
+        pars->posY += pars->dirY * pars->moveSpeed;
+      raycasting(pars);
     }
-    if (pars->key == 115)
+    if (pars->key_s == 1)
     {
       if(pars->worldMap[(int)(pars->posX - pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
         pars->posX -= pars->dirX * pars->moveSpeed;
       if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->dirY * pars->moveSpeed)] != '1')
         pars->posY -= pars->dirY * pars->moveSpeed;
+      raycasting(pars);
     }
-    if (pars->key == 65363)
+    if (pars->key_right == 1)
     {
       pars->oldDirX = pars->dirX;
       pars->dirX = pars->dirX * cos(pars->rotSpeed) - pars->dirY * sin(pars->rotSpeed);
@@ -295,8 +318,9 @@ int             key_action(t_parsing *pars)
       pars->oldPlaneX = pars->planeX;
       pars->planeX = pars->planeX * cos(pars->rotSpeed) - pars->planeY * sin(pars->rotSpeed);
       pars->planeY = pars->oldPlaneX * sin(pars->rotSpeed) + pars->planeY * cos(pars->rotSpeed);
+      raycasting(pars);
     }
-    if (pars->key == 65361)
+    if (pars->key_left == 1)
     {
       pars->oldDirX = pars->dirX;
       pars->dirX = pars->dirX * cos(-pars->rotSpeed) - pars->dirY * sin(-pars->rotSpeed);
@@ -304,8 +328,10 @@ int             key_action(t_parsing *pars)
       pars->oldPlaneX = pars->planeX;
       pars->planeX = pars->planeX * cos(-pars->rotSpeed) - pars->planeY * sin(-pars->rotSpeed);
       pars->planeY = pars->oldPlaneX * sin(-pars->rotSpeed) + pars->planeY * cos(-pars->rotSpeed);
-    }
       raycasting(pars);
+    }
+    if (pars->key_d == 0 && pars->key_left == 0 && pars->key_q == 0 && pars->key_right == 0 && pars->key_s == 0 && pars->key_z == 0)
+        mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
     return (0);
 }
 

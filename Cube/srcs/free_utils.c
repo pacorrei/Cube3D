@@ -9,6 +9,7 @@
 /*   Updated: 2020/01/08 00:32:10 by pacorrei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "ft_cube.h"
 
 void	free_char_double(char **str)
@@ -60,5 +61,5 @@ void	free_all(t_parsing *pars)
 	if (pars->sprite_order != NULL)
 		free(pars->sprite_order);
 	if (pars->pos_sprite != NULL)
-		free_int_double(pars->pos_sprite);	
+		free_int_double(pars->pos_sprite);
 }
