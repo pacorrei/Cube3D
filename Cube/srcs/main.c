@@ -1,338 +1,302 @@
 #include "ft_cube.h"
-#include <math.h>
-void vector_dir_value(t_parsing *pars)
+
+void	vector_dir_value(t_parsing *pars)
 {
-  //printf("player %c\n", pars->pos_player);
 	if (pars->pos_player == 'W')
 	{
 		pars->dirX = 0;
 		pars->dirY = -1;
-    pars->planeX = 0.66;
-    pars->planeY = 0;
+		pars->planeX = 0.66;
+		pars->planeY = 0;
 	}
 	if (pars->pos_player == 'E')
 	{
 		pars->dirX = 0;
 		pars->dirY = 1;
-    pars->planeX = -0.66;
-    pars->planeY = 0;
+		pars->planeX = -0.66;
+		pars->planeY = 0;
 	}
 	if (pars->pos_player == 'N')
 	{
 		pars->dirX = 1;
 		pars->dirY = 0;
-    pars->planeX = 0;
-    pars->planeY = 0.66;
+		pars->planeX = 0;
+		pars->planeY = 0.66;
 	}
 	if (pars->pos_player == 'S')
 	{
 		pars->dirX = -1;
 		pars->dirY = 0;
-    pars->planeX = 0;
-    pars->planeY = -0.66;
+		pars->planeX = 0;
+		pars->planeY = -0.66;
 	}
 }
 
-char            *get_addr_tex(t_parsing *pars)
+char	*get_addr_tex(t_parsing *pars)
 {
-  if (pars->side == 0)
-  {
-    if(pars->rayDirX < 0)
-      return(pars->addr_so);
-    else
-      return(pars->addr_no);
-  }
-  else
-  {
-    if (pars->rayDirY < 0)
-      return(pars->addr_we);
-    else
-      return(pars->addr_ea);
-  }
+	if (pars->side == 0)
+	{
+		if(pars->rayDirX < 0)
+			return(pars->addr_so);
+		else
+			return(pars->addr_no);
+	}
+	else
+	{
+		if (pars->rayDirY < 0)
+			return(pars->addr_we);
+		else
+			return(pars->addr_ea);
+	}
 }
 
-int             get_line_length_tex(t_parsing *pars)
+int		get_line_length_tex(t_parsing *pars)
 {
-  if (pars->side == 0)
-  {
-    if(pars->rayDirX < 0)
-      return(pars->line_length_so);
-    else
-      return(pars->line_length_no);
-  }
-  else
-  {
-    if (pars->rayDirY < 0)
-      return(pars->line_length_we);
-    else
-      return(pars->line_length_ea);
-  }
+	if (pars->side == 0)
+	{
+		if(pars->rayDirX < 0)
+			return(pars->line_length_so);
+		else
+			return(pars->line_length_no);
+	}
+	else
+	{
+		if (pars->rayDirY < 0)
+			return(pars->line_length_we);
+		else
+			return(pars->line_length_ea);
+	}
 }
 
-void            decalage_bit(t_parsing *pars, int color)
+void	my_mlx_pixel_put(t_parsing *pars, int x, int y, int color)
 {
-    int copy;
+	int pos;
 
-    copy = color & 0xFF0000;
-    pars->red = copy >> 16;
-    copy = color & 0x00FF00;
-    pars->green = copy >> 8;
-    copy = color & 0xFF;
-    pars->blue = color;
-    copy = color & 0xFF000000;
-    pars->alpha = color >> 24;
+	pos = (x * 4 + y * pars->line_length);
+	if (color == 255)
+	{
+		pars->addr [pos + 0] = pars->alpha;
+		pars->addr [pos + 1] = pars->red;
+		pars->addr [pos + 2] = pars->green;
+		pars->addr [pos + 3] = pars->blue;
+	}
+	else
+	{
+		pars->addr [pos + 0] = color;
+		pars->addr [pos + 1] = color;
+		pars->addr [pos + 2] = color;
+		pars->addr [pos + 3] = color;
+	}
 }
 
-void            my_mlx_pixel_put(t_parsing *pars, int x, int y, int color)
+void	raycasting_sprite(t_parsing *pars)
 {
-    int pos;
+	int i;
 
-    //printf("color :%d\n", color);
-    pos = (x * 4 + y * pars->line_length);
-    //decalage_bit(pars, color);
-    if (color == 255)
-    {
-      pars->addr [pos + 0] = pars->alpha;
-      pars->addr [pos + 1] = pars->red;
-      pars->addr [pos + 2] = pars->green;
-      pars->addr [pos + 3] = pars->blue;
+	i = 0;
+	while (i < pars->nb_sprite)
+	{
+		pars->sprite_order[i] = i;
+		pars->sprite_dist[i] = ((pars->posX - pars->pos_sprite[i][0]) * (pars->posX - pars->pos_sprite[i][0]) 
+		+ (pars->posY - pars->pos_sprite[i][1]) * (pars->posY - pars->pos_sprite[i][1]));
+		i++;
+	}
+	sort_sprites(pars);
+	i = 0;
+	while (i < pars->nb_sprite)
+	{
+		double spriteX = pars->pos_sprite[pars->sprite_order[i]][0] + 0.5 - pars->posX;
+		double spriteY = pars->pos_sprite[pars->sprite_order[i]][1] + 0.5 - pars->posY;
+		double invDet = 1.0 / (pars->planeX * pars->dirY - pars->dirX * pars->planeY);
+		double transformX = invDet * (pars->dirY * spriteX - pars->dirX * spriteY);
+		double transformY = invDet * (-pars->planeY * spriteX + pars->planeX * spriteY);
+		int spriteScreenX = (int)((pars->w / 2) * (1 + transformX / transformY));
+		int spriteHeight = abs((int)(pars->h / (transformY)));
+		int drawStartY = -spriteHeight / 2 + pars->h / 2;
+		if(drawStartY < 0)
+			drawStartY = 0;
+		int drawEndY = spriteHeight / 2 + pars->h / 2;
+		if(drawEndY >= pars->h)
+			drawEndY = pars->h - 1;
+		int spriteWidth = abs( (int) (pars->h / (transformY)));
+		int drawStartX = -spriteWidth / 2 + spriteScreenX;
+		if(drawStartX < 0)
+			drawStartX = 0;
+		int drawEndX = spriteWidth / 2 + spriteScreenX;
+		if(drawEndX >= pars->w)
+			drawEndX = pars->w - 1;
+		int stripe = drawStartX;
+		while (stripe < drawEndX)
+		{
+			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * pars->tex_wight / spriteWidth) / 256;
+			if(transformY > 0 && stripe > 0 && stripe < pars->w && transformY < pars->z_buffer[stripe])
+			{
+				int y = drawStartY;
+				while (y < drawEndY)
+				{
+					int d = (y) * 256 - pars->h * 128 + spriteHeight * 128;
+					int texY = ((d * pars->tex_height) / spriteHeight) / 256;
+					pars->alpha = pars->addr_s[pars->line_length_s * texY + texX * 4];
+					pars->red = pars->addr_s[pars->line_length_s * texY + texX * 4 + 1];
+					pars->green = pars->addr_s[pars->line_length_s * texY + texX * 4 + 2];
+					pars->blue = pars->addr_s[pars->line_length_s * texY + texX * 4 + 3];
+					if(!(pars->red == 0 && pars->blue == 0 && pars->green == 0))
+						my_mlx_pixel_put(pars, stripe, y, 255);
+					y++;
+				}
+			}
+			stripe++;
+		}
+		i++;
+	}
+	//mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+}
+
+void	color_ceiling(t_parsing *pars, int x)
+{
+	int i;
+
+	i = 0;
+	while (i < pars->drawStart)
+	{
+		pars->alpha = 0;
+		pars->red = pars->r_ceil;
+		pars->green = pars->g_ceil;
+		pars->blue = pars->b_ceil;
+		my_mlx_pixel_put(pars, x, i, 255);
+		i++;
+	}
+}
+
+void	color_floor(t_parsing *pars, int x)
+{
+	int i;
+
+	i = pars->drawEnd + 1;
+	while (i < pars->h)
+	{
+		pars->alpha = 0;
+		pars->red = pars->r_floor;
+		pars->green = pars->g_floor;
+		pars->blue = pars->b_floor;
+		my_mlx_pixel_put(pars, x, i, 255);
+		i++;
+	}
+}
+
+int		window_action(t_parsing *pars)
+{
+	mlx_destroy_window(pars->mlx, pars->win);
+	free_all(pars);
+	exit(0);
+}
+
+int		key_pressed(int keycode, t_parsing *pars)
+{
+	if (keycode == 100)
+		pars->key_d = 1;
+	if (keycode == 113)
+		pars->key_q = 1;
+	if (keycode == 122)
+		pars->key_z = 1;
+	if (keycode == 115)
+		pars->key_s = 1;
+	if (keycode == 65363)
+		pars->key_right = 1;
+	if (keycode == 65361)
+		pars->key_left = 1;
+	if (keycode == 65307)
+		pars->key_echap = 1;
+	mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+	return (0);
+}
+
+int		key_release(int keycode, t_parsing *pars)
+{
+	pars->key_z = 0;
+	pars->key_q = 0;
+	pars->key_s = 0;
+	pars->key_d = 0;
+	pars->key_right = 0;
+	pars->key_left = 0;
+	pars->key_echap = 0;
+	(void)keycode;
+	mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+	return (0);
+}
+
+int		key_action(t_parsing *pars)
+{
+	if (pars->key_echap == 1)
+	{
+		mlx_destroy_window(pars->mlx, pars->win);
+		free_all(pars);
+		exit(0);
+	}
+	if (pars->key_d == 1)
+	{
+		if(pars->worldMap[(int)(pars->posX + pars->planeX * pars->moveSpeed)][(int)pars->posY] != '1')
+			pars->posX += pars->planeX * pars->moveSpeed;
+		if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->planeY * pars->moveSpeed)] != '1')
+			pars->posY += pars->planeY * pars->moveSpeed;
+		raycasting(pars);
+		mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+	}
+	if (pars->key_q == 1)
+	{
+		if(pars->worldMap[(int)(pars->posX - pars->planeX * pars->moveSpeed)][(int)pars->posY] != '1')
+			pars->posX -= pars->planeX * pars->moveSpeed;
+		if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->planeY * pars->moveSpeed)] != '1')
+			pars->posY -= pars->planeY * pars->moveSpeed;
+		raycasting(pars);
+		mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+	}
+	if (pars->key_z == 1)
+	{
+		if(pars->worldMap[(int)(pars->posX + pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
+			pars->posX += pars->dirX * pars->moveSpeed;
+		if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->dirY * pars->moveSpeed)] != '1')
+			pars->posY += pars->dirY * pars->moveSpeed;
+		raycasting(pars);
+		mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+	}
+	if (pars->key_s == 1)
+	{
+		if(pars->worldMap[(int)(pars->posX - pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
+			pars->posX -= pars->dirX * pars->moveSpeed;
+		if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->dirY * pars->moveSpeed)] != '1')
+			pars->posY -= pars->dirY * pars->moveSpeed;
+		raycasting(pars);
+		mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
     }
-    else
-    {
-      pars->addr [pos + 0] = color;
-      pars->addr [pos + 1] = color;
-      pars->addr [pos + 2] = color;
-      pars->addr [pos + 3] = color;
-    }
-}
-
-void  raycasting_sprite(t_parsing *pars)
-{
-  int i;
-
-  i = 0;
-  while (i < pars->nb_sprite)
-  {
-      pars->sprite_order[i] = i;
-      pars->sprite_dist[i] = ((pars->posX - pars->pos_sprite[i][0]) * (pars->posX - pars->pos_sprite[i][0]) 
-      + (pars->posY - pars->pos_sprite[i][1]) * (pars->posY - pars->pos_sprite[i][1]));
-      i++;
-  }
-    sort_sprites(pars);
-    i = 0;
-    while (i < pars->nb_sprite)
-    {
-      //printf("sprite x ;%d sprite y ;%d  nb sprite ;%d, sprite order :%d\n", pars->pos_sprite[pars->sprite_order[i]][0], pars->pos_sprite[pars->sprite_order[i]][1], pars->nb_sprite, pars->sprite_order[i]);
-      double spriteX = pars->pos_sprite[pars->sprite_order[i]][0] + 0.5 - pars->posX;
-      double spriteY = pars->pos_sprite[pars->sprite_order[i]][1] - pars->posY;
-      double invDet = 1.0 / (pars->planeX * pars->dirY - pars->dirX * pars->planeY);
-
-      double transformX = invDet * (pars->dirY * spriteX - pars->dirX * spriteY);
-      double transformY = invDet * (-pars->planeY * spriteX + pars->planeX * spriteY);
-
-      int spriteScreenX = (int)((pars->w / 2) * (1 + transformX / transformY));
-
-      int spriteHeight = abs((int)(pars->h / (transformY)));
-      int drawStartY = -spriteHeight / 2 + pars->h / 2;
-      if(drawStartY < 0)
-          drawStartY = 0;
-      int drawEndY = spriteHeight / 2 + pars->h / 2;
-      if(drawEndY >= pars->h)
-        drawEndY = pars->h - 1;
-
-      int spriteWidth = abs( (int) (pars->h / (transformY)));
-      int drawStartX = -spriteWidth / 2 + spriteScreenX;
-      if(drawStartX < 0)
-          drawStartX = 0;
-      int drawEndX = spriteWidth / 2 + spriteScreenX;
-      if(drawEndX >= pars->w)
-        drawEndX = pars->w - 1;
-      int stripe = drawStartX;
-      while (stripe < drawEndX)
-      {
-        int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * pars->tex_wight / spriteWidth) / 256;
-        //the conditions in the if are:
-        //1) it's in front of camera plane so you don't see things behind you
-        //2) it's on the screen (left)
-        //3) it's on the screen (right)
-        //4) ZBuffer, with perpendicular distance
-        //printf("transformY ;%f stripe %d pars->w :%d z_buffer :%f\n", transformY, stripe, pars->w, pars->z_buffer[stripe]);
-        if(transformY > 0 && stripe > 0 && stripe < pars->w && transformY < pars->z_buffer[stripe])
-        {
-            int y = drawStartY;
-            while (y < drawEndY)
-            {
-              int d = (y) * 256 - pars->h * 128 + spriteHeight * 128;
-              int texY = ((d * pars->tex_height) / spriteHeight) / 256;
-              pars->alpha = pars->addr_s[pars->line_length_s * texY + texX * 4];
-              pars->red = pars->addr_s[pars->line_length_s * texY + texX * 4 + 1];
-              pars->green = pars->addr_s[pars->line_length_s * texY + texX * 4 + 2];
-              pars->blue = pars->addr_s[pars->line_length_s * texY + texX * 4 + 3];
-              if(!(pars->red == 0 && pars->blue == 0 && pars->green == 0))
-                  my_mlx_pixel_put(pars, stripe, y, 255);
-              y++;
-            }
-        }
-        stripe++;
-      }
-      i++;
-    }
-}
-
-void  color_ceiling(t_parsing *pars, int x)
-{
-  int i;
-
-  i = 0;
-  while (i < pars->drawStart)
-  {
-    //printf("rouge ;%d vert ;%d bleu ;%d\n", pars->r_ceil, pars->g_ceil, pars->b_ceil);
-    pars->alpha = 0;
-    pars->red = pars->r_ceil;
-    pars->green = pars->g_ceil;
-    pars->blue = pars->b_ceil;
-    my_mlx_pixel_put(pars, x, i, 255);
-    i++;
-  }
-}
-
-void  color_floor(t_parsing *pars, int x)
-{
-  int i;
-
-  i = pars->drawEnd + 1;
-  while (i < pars->h)
-  {
-    pars->alpha = 0;
-    pars->red = pars->r_floor;
-    pars->green = pars->g_floor;
-    pars->blue = pars->b_floor;
-    my_mlx_pixel_put(pars, x, i, 255);
-    i++;
-  }
-}
-
-void  clean_screen(t_parsing *pars, int x_max, int y_max)
-{
-  int x;
-  int y;
-
-  y = 0;
-  while (y < y_max)
-  {
-    x = 0;
-    while (x < x_max)
-    {
-      my_mlx_pixel_put(pars, x, y, 0);
-      x++;
-    }
-    y++;
-  }
-}
-
-
-int             window_action(t_parsing *pars)
-{
-  mlx_destroy_window(pars->mlx, pars->win);
-  free_all(pars);
-  exit(0);
-}
-
-int             key_pressed(int keycode, t_parsing *pars)
-{
-  if (keycode == 100)
-    pars->key_d = 1;
-  if (keycode == 113)
-    pars->key_q = 1;
-  if (keycode == 122)
-    pars->key_z = 1;
-  if (keycode == 115)
-    pars->key_s = 1;
-  if (keycode == 65363)
-    pars->key_right = 1;
-  if (keycode == 65361)
-    pars->key_left = 1;
-  if (keycode == 65307)
-    pars->key_echap = 1;
-  return (0);
-}
-
-int             key_release(int keycode, t_parsing *pars)
-{
-  pars->key_z = 0;
-  pars->key_q = 0;
-  pars->key_s = 0;
-  pars->key_d = 0;
-  pars->key_right = 0;
-  pars->key_left = 0;
-  pars->key_echap = 0;
-  (void)keycode;
-  return (0);
-}
-
-int             key_action(t_parsing *pars)
-{
-  if (pars->key_echap == 1)
-  {
-        mlx_destroy_window(pars->mlx, pars->win);
-        free_all(pars);
-        exit(0);
-  }
-  if (pars->key_d == 1)
-  {
-    if(pars->worldMap[(int)(pars->posX + pars->planeX * pars->moveSpeed)][(int)pars->posY] != '1')
-        pars->posX += pars->planeX * pars->moveSpeed;
-    if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->planeY * pars->moveSpeed)] != '1')
-        pars->posY += pars->planeY * pars->moveSpeed;
-    raycasting(pars);
-  }
-  if (pars->key_q == 1)
-  {
-    if(pars->worldMap[(int)(pars->posX - pars->planeX * pars->moveSpeed)][(int)pars->posY] != '1')
-        pars->posX -= pars->planeX * pars->moveSpeed;
-    if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->planeY * pars->moveSpeed)] != '1')
-        pars->posY -= pars->planeY * pars->moveSpeed;
-    raycasting(pars);
-  }
-    if (pars->key_z == 1)
-    {
-      if(pars->worldMap[(int)(pars->posX + pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
-        pars->posX += pars->dirX * pars->moveSpeed;
-      if(pars->worldMap[(int)pars->posX][(int)(pars->posY + pars->dirY * pars->moveSpeed)] != '1')
-        pars->posY += pars->dirY * pars->moveSpeed;
-      raycasting(pars);
-    }
-    if (pars->key_s == 1)
-    {
-      if(pars->worldMap[(int)(pars->posX - pars->dirX * pars->moveSpeed)][(int)pars->posY] != '1')
-        pars->posX -= pars->dirX * pars->moveSpeed;
-      if(pars->worldMap[(int)pars->posX][(int)(pars->posY - pars->dirY * pars->moveSpeed)] != '1')
-        pars->posY -= pars->dirY * pars->moveSpeed;
-      raycasting(pars);
-    }
-    if (pars->key_right == 1)
-    {
-      pars->oldDirX = pars->dirX;
-      pars->dirX = pars->dirX * cos(pars->rotSpeed) - pars->dirY * sin(pars->rotSpeed);
-      pars->dirY = pars->oldDirX * sin(pars->rotSpeed) + pars->dirY * cos(pars->rotSpeed);
-      pars->oldPlaneX = pars->planeX;
-      pars->planeX = pars->planeX * cos(pars->rotSpeed) - pars->planeY * sin(pars->rotSpeed);
-      pars->planeY = pars->oldPlaneX * sin(pars->rotSpeed) + pars->planeY * cos(pars->rotSpeed);
-      raycasting(pars);
-    }
-    if (pars->key_left == 1)
-    {
-      pars->oldDirX = pars->dirX;
-      pars->dirX = pars->dirX * cos(-pars->rotSpeed) - pars->dirY * sin(-pars->rotSpeed);
-      pars->dirY = pars->oldDirX * sin(-pars->rotSpeed) + pars->dirY * cos(-pars->rotSpeed);
-      pars->oldPlaneX = pars->planeX;
-      pars->planeX = pars->planeX * cos(-pars->rotSpeed) - pars->planeY * sin(-pars->rotSpeed);
-      pars->planeY = pars->oldPlaneX * sin(-pars->rotSpeed) + pars->planeY * cos(-pars->rotSpeed);
-      raycasting(pars);
-    }
-    if (pars->key_d == 0 && pars->key_left == 0 && pars->key_q == 0 && pars->key_right == 0 && pars->key_s == 0 && pars->key_z == 0)
-        mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
-    return (0);
+	if (pars->key_right == 1)
+	{
+		pars->oldDirX = pars->dirX;
+		pars->dirX = pars->dirX * cos(pars->rotSpeed) - pars->dirY * sin(pars->rotSpeed);
+		pars->dirY = pars->oldDirX * sin(pars->rotSpeed) + pars->dirY * cos(pars->rotSpeed);
+		pars->oldPlaneX = pars->planeX;
+		pars->planeX = pars->planeX * cos(pars->rotSpeed) - pars->planeY * sin(pars->rotSpeed);
+		pars->planeY = pars->oldPlaneX * sin(pars->rotSpeed) + pars->planeY * cos(pars->rotSpeed);
+		raycasting(pars);
+		mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+	}
+	if (pars->key_left == 1)
+	{
+		pars->oldDirX = pars->dirX;
+		pars->dirX = pars->dirX * cos(-pars->rotSpeed) - pars->dirY * sin(-pars->rotSpeed);
+		pars->dirY = pars->oldDirX * sin(-pars->rotSpeed) + pars->dirY * cos(-pars->rotSpeed);
+		pars->oldPlaneX = pars->planeX;
+		pars->planeX = pars->planeX * cos(-pars->rotSpeed) - pars->planeY * sin(-pars->rotSpeed);
+		pars->planeY = pars->oldPlaneX * sin(-pars->rotSpeed) + pars->planeY * cos(-pars->rotSpeed);
+		raycasting(pars);
+		mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+	}
+	if (pars->key_d == 0 && pars->key_left == 0 && pars->key_q == 0 && pars->key_right == 0 && pars->key_s == 0 && pars->key_z == 0)
+	{
+		raycasting(pars);
+		mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+	}
+	return (0);
 }
 
 int	main(int ac, char **av)
@@ -499,7 +463,7 @@ int	main(int ac, char **av)
       x++;
     }
     raycasting_sprite(pars);
-    mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
+   // mlx_put_image_to_window(pars->mlx, pars->win, pars->img, 0, 0);
     if (pars->save == 1)
     {
         make_bmp(pars);

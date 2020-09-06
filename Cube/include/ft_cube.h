@@ -30,6 +30,7 @@ typedef struct  s_parsing{
     char    *path_txt_s;
     char    pos_player;
     int     verif;
+	int		line_empty;
     int     map_verif;
     int     res_x;
     int     res_y;
