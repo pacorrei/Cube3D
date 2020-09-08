@@ -25,9 +25,17 @@ void	intit_struct_pars(t_parsing *pars)
 	pars->pos_sprite = NULL;
 	pars->sprite_dist = NULL;
 	pars->sprite_order = NULL;
+	pars->z_buffer = NULL;
 	pars->save = 0;
 	pars->screen_x = 0;
 	pars->screen_y = 0;
+	pars->key_z = 0;
+	pars->key_q = 0;
+	pars->key_s = 0;
+	pars->key_d = 0;
+	pars->key_right = 0;
+	pars->key_left = 0;
+	pars->key_echap = 0;
 }
 
 void	ft_realloc_map(t_parsing *pars, char *line)

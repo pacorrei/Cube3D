@@ -47,3 +47,15 @@ void	verif_argument_save(char *str)
 	if (verif == 0)
 		error_argument();
 }
+
+void	main_verif_argument(t_parsing *pars, char **av, int ac)
+{
+	if (ac == 1 || ac > 3)
+		error_argument();
+	verif_argument(av[1]);
+	if (ac == 3)
+	{
+		verif_argument_save(av[2]);
+		pars->save = 1;
+	}
+}

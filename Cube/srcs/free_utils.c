@@ -62,4 +62,6 @@ void	free_all(t_parsing *pars)
 		free(pars->sprite_order);
 	if (pars->pos_sprite != NULL)
 		free_int_double(pars->pos_sprite);
+	if (pars->z_buffer != NULL)
+		free(pars->z_buffer);
 }

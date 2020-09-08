@@ -65,6 +65,26 @@ typedef struct  s_parsing{
     double  rotSpeed;
     double  oldDirX;
     double  oldPlaneX;
+	double	wallX;
+	double	step;
+	double	texPos;
+	double	spriteX;
+	double	spriteY;
+	double	invDet;
+	double	transformX;
+	double	transformY;
+	int 	texX;
+	int		texY;
+	int		spri_texX;
+	int		spri_texY;
+	int		spriteScreenX;
+	int		spriteHeight;
+	int		spri_drawStartY;
+	int		spri_drawEndY;
+	int		spriteWidth;
+	int		spri_drawStartX;
+	int		spri_drawEndX;
+	int		stripe;
     int     stepX;
     int     stepY;
     int     hit;
@@ -166,5 +186,9 @@ void	verif_path_so(t_parsing *pars, char *path);
 void	verif_path_ea(t_parsing *pars, char *path);
 void	verif_path_we(t_parsing *pars, char *path);
 void	verif_path_s(t_parsing *pars, char *path);
+void	turn_left(t_parsing *pars);
+void	turn_right(t_parsing *pars);
+int		key_action(t_parsing *pars);
+void	main_verif_argument(t_parsing *pars, char **av, int ac);
 
 #endif
