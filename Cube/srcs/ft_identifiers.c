@@ -65,6 +65,8 @@ int		find_nb(t_parsing *pars, int i, int j)
 
 void	identifiers_r(t_parsing *pars, int i, int j)
 {
+	if (pars->verif_r == 1)
+		error_informations(pars);
 	pars->verif = 0;
 	while (pars->info[i][j] != '\0')
 	{
@@ -84,4 +86,5 @@ void	identifiers_r(t_parsing *pars, int i, int j)
 		pars->res_x = pars->screen_x;
 	if (pars->res_y > pars->screen_y)
 		pars->res_y = pars->screen_y;
+	pars->verif_r = 1;
 }

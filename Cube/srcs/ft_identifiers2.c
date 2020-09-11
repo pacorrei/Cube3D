@@ -43,6 +43,8 @@ int		search_nb_c(t_parsing *pars, int i, int j)
 
 void	identifiers_c(t_parsing *pars, int i, int j)
 {
+	if (pars->verif_c == 1)
+		error_informations(pars);
 	pars->verif = 0;
 	while (pars->info[i][j] != '\0')
 	{
@@ -64,6 +66,7 @@ void	identifiers_c(t_parsing *pars, int i, int j)
 	}
 	if (pars->verif == 0 || pars->verif == 1 || pars->verif == 2)
 		error_miss_informations(pars);
+	pars->verif_c = 1;
 }
 
 int		search_nb_f(t_parsing *pars, int i, int j)
@@ -97,6 +100,8 @@ int		search_nb_f(t_parsing *pars, int i, int j)
 
 void	identifiers_f(t_parsing *pars, int i, int j)
 {
+	if (pars->verif_f == 1)
+		error_informations(pars);
 	pars->verif = 0;
 	while (pars->info[i][j] != '\0')
 	{
@@ -118,4 +123,5 @@ void	identifiers_f(t_parsing *pars, int i, int j)
 	}
 	if (pars->verif == 0 || pars->verif == 1 || pars->verif == 2)
 		error_miss_informations(pars);
+	pars->verif_f = 1;
 }

@@ -18,21 +18,21 @@ void	make_world_map(t_parsing *pars, int imin, int imax)
 	int j;
 
 	i = imax - imin;
-	pars->worldMap = (char**)malloc(sizeof(char*) * (i + 1));
-	pars->worldMap[i] = NULL;
+	pars->worldmap = (char**)malloc(sizeof(char*) * (i + 1));
+	pars->worldmap[i] = NULL;
 	i--;
 	while (imin < imax)
 	{
-		pars->worldMap[i] = ft_strdup(pars->info[imin]);
+		pars->worldmap[i] = ft_strdup(pars->info[imin]);
 		imin++;
 		j = 0;
-		while (pars->worldMap[i][j] != '\0')
+		while (pars->worldmap[i][j] != '\0')
 		{
-			if (pars->worldMap[i][j] == 'N' || pars->worldMap[i][j] == 'S'
-			|| pars->worldMap[i][j] == 'E' || pars->worldMap[i][j] == 'W')
+			if (pars->worldmap[i][j] == 'N' || pars->worldmap[i][j] == 'S'
+			|| pars->worldmap[i][j] == 'E' || pars->worldmap[i][j] == 'W')
 			{
-				pars->posY = j + 0.5;
-				pars->posX = i + 0.5;
+				pars->posy = j + 0.5;
+				pars->posx = i + 0.5;
 			}
 			j++;
 		}

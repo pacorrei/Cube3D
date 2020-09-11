@@ -55,7 +55,6 @@ void	verif_map_informations(t_parsing *pars, int i, int j)
 	{
 		verif_valid_map(pars, i, j);
 		verif_close_map(pars, i, j);
-		ft_putstr("Valide Map");
 		pars->map_verif = 1;
 	}
 }
@@ -84,7 +83,6 @@ void	find_informations(t_parsing *pars)
 	int j;
 
 	i = 0;
-	pars->map_verif = 0;
 	while (pars->info[i] != NULL)
 	{
 		j = 0;
@@ -101,6 +99,9 @@ void	find_informations(t_parsing *pars)
 		}
 		i++;
 	}
-	if (pars->map_verif == 0)
+	if (pars->map_verif == 0 || pars->verif_r == 0 || pars->verif_f == 0
+	|| pars->verif_c == 0 || pars->verif_s == 0 || pars->verif_no == 0
+	|| pars->verif_so == 0 || pars->verif_ea == 0 || pars->verif_we == 0)
 		error_miss_informations(pars);
+	ft_putstr("Valide Map");
 }

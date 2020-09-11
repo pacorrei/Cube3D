@@ -22,7 +22,7 @@ void	sort_sprites(t_parsing *pars)
 	while (j < pars->nb_sprite)
 	{
 		i = 0;
-		while (i + 1 < pars->nb_sprite)
+		while (i < pars->nb_sprite)
 		{
 			if (pars->sprite_dist[i] < pars->sprite_dist[i + 1])
 			{
@@ -61,14 +61,14 @@ void	find_sprite_pos(t_parsing *pars)
 	pars->pos_sprite[pars->nb_sprite] = NULL;
 	pars->sprite_order = malloc(sizeof(int) * (pars->nb_sprite + 1));
 	pars->sprite_order[pars->nb_sprite] = '\0';
-	pars->sprite_dist = malloc(sizeof(int) * (pars->nb_sprite + 1));
+	pars->sprite_dist = malloc(sizeof(double) * (pars->nb_sprite + 1));
 	pars->sprite_dist[pars->nb_sprite] = '\0';
-	while (pars->worldMap[i] != NULL)
+	while (pars->worldmap[i] != NULL)
 	{
 		j = 0;
-		while (pars->worldMap[i][j] != '\0')
+		while (pars->worldmap[i][j] != '\0')
 		{
-			if (pars->worldMap[i][j] == '2')
+			if (pars->worldmap[i][j] == '2')
 				k = fill_sprite_pos(pars, i, j, k);
 			j++;
 		}

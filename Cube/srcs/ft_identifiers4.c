@@ -38,7 +38,7 @@ void	identifiers_we(t_parsing *pars, int i, int j)
 	int k;
 
 	k = 0;
-	if (pars->path_txt_we != NULL)
+	if (pars->verif_we == 1 || pars->path_txt_we != NULL)
 		error_informations(pars);
 	while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
 	{
@@ -59,6 +59,7 @@ void	identifiers_we(t_parsing *pars, int i, int j)
 	}
 	attribute_path_we(pars, i, j, k);
 	verif_path_we(pars, pars->path_txt_we);
+	pars->verif_we = 1;
 }
 
 void	attribute_path_ea(t_parsing *pars, int i, int j, int k)
@@ -87,7 +88,7 @@ void	identifiers_ea(t_parsing *pars, int i, int j)
 	int k;
 
 	k = 0;
-	if (pars->path_txt_ea != NULL)
+	if (pars->verif_ea == 1 || pars->path_txt_ea != NULL)
 		error_informations(pars);
 	while (pars->info[i][j] != '.' && pars->info[i][j] != '\0')
 	{
@@ -108,4 +109,5 @@ void	identifiers_ea(t_parsing *pars, int i, int j)
 	}
 	attribute_path_ea(pars, i, j, k);
 	verif_path_ea(pars, pars->path_txt_ea);
+	pars->verif_ea = 1;
 }

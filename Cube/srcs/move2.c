@@ -14,30 +14,28 @@
 
 void	turn_right(t_parsing *pars)
 {
-	pars->oldDirX = pars->dirX;
-	pars->dirX = pars->dirX * cos(pars->rotSpeed) -
-	pars->dirY * sin(pars->rotSpeed);
-	pars->dirY = pars->oldDirX * sin(pars->rotSpeed) +
-	pars->dirY * cos(pars->rotSpeed);
-	pars->oldPlaneX = pars->planeX;
-	pars->planeX = pars->planeX * cos(pars->rotSpeed) -
-	pars->planeY * sin(pars->rotSpeed);
-	pars->planeY = pars->oldPlaneX * sin(pars->rotSpeed) +
-	pars->planeY * cos(pars->rotSpeed);
-	raycasting(pars);
+	pars->olddirx = pars->dirx;
+	pars->dirx = pars->dirx * cos(pars->rotspeed) -
+	pars->diry * sin(pars->rotspeed);
+	pars->diry = pars->olddirx * sin(pars->rotspeed) +
+	pars->diry * cos(pars->rotspeed);
+	pars->oldplanex = pars->planex;
+	pars->planex = pars->planex * cos(pars->rotspeed) -
+	pars->planey * sin(pars->rotspeed);
+	pars->planey = pars->oldplanex * sin(pars->rotspeed) +
+	pars->planey * cos(pars->rotspeed);
 }
 
 void	turn_left(t_parsing *pars)
 {
-	pars->oldDirX = pars->dirX;
-	pars->dirX = pars->dirX * cos(-pars->rotSpeed) -
-	pars->dirY * sin(-pars->rotSpeed);
-	pars->dirY = pars->oldDirX * sin(-pars->rotSpeed) +
-	pars->dirY * cos(-pars->rotSpeed);
-	pars->oldPlaneX = pars->planeX;
-	pars->planeX = pars->planeX * cos(-pars->rotSpeed) -
-	pars->planeY * sin(-pars->rotSpeed);
-	pars->planeY = pars->oldPlaneX * sin(-pars->rotSpeed) +
-	pars->planeY * cos(-pars->rotSpeed);
-	raycasting(pars);
+	pars->olddirx = pars->dirx;
+	pars->dirx = pars->dirx * cos(-pars->rotspeed) -
+	pars->diry * sin(-pars->rotspeed);
+	pars->diry = pars->olddirx * sin(-pars->rotspeed) +
+	pars->diry * cos(-pars->rotspeed);
+	pars->oldplanex = pars->planex;
+	pars->planex = pars->planex * cos(-pars->rotspeed) -
+	pars->planey * sin(-pars->rotspeed);
+	pars->planey = pars->oldplanex * sin(-pars->rotspeed) +
+	pars->planey * cos(-pars->rotspeed);
 }

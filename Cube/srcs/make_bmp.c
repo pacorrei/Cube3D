@@ -79,5 +79,7 @@ void	make_bmp(t_parsing *pars)
 	ft_write_in_file_header(fd, 54 + (pars->res_x * pars->res_y), pars);
 	if (ft_write_in_file_img(fd, pars) == 0)
 		error_write_bmp(pars);
+	free_all(pars);
 	close(fd);
+	exit(0);
 }

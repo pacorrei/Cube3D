@@ -1,14 +1,13 @@
-NAME = Cube3D
+NAME = cub3D
 
 all: ${NAME}
 
 CFLAGS = -Wall -Werror -Wextra
-
 CC = gcc
 
 RM = rm -rf
 
-HEAD = -I include/ -I /mlx -L /mlx  -lmlx -lm -lXext -lX11 -lbsd
+HEAD = -I include/ -I /usr/local/include -L /usr/local/lib  -lmlx -lm -lXext -lX11 -lbsd
 
 
 SRCS_PATH = srcs/
@@ -20,7 +19,8 @@ SRCS_NAME = parsing.c find_informations.c free_utils.c ft_cube_utils.c \
 	    get_next_line_utils.c verif_argument.c main.c ft_identifiers3.c \
 		ft_identifiers4.c ft_identifiers5.c verif_valid_map.c \
 		make_bmp.c ft_error_2.c verif_path_text.c pars_sprite.c \
-		verif_valid_map2.c move.c move2.c \
+		verif_valid_map2.c move.c move2.c sprite_ray.c \
+		raycasting.c raycasting2.c key_event.c floor_ceiling.c \
 
 OBJS_NAME = $(SRCS_NAME:.c=.o)
 

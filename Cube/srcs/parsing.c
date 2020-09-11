@@ -12,10 +12,23 @@
 
 #include "ft_cube.h"
 
+void	intit_struct_pars2(t_parsing *pars)
+{
+	pars->verif_r = 0;
+	pars->verif_c = 0;
+	pars->verif_f = 0;
+	pars->verif_s = 0;
+	pars->verif_no = 0;
+	pars->verif_so = 0;
+	pars->verif_we = 0;
+	pars->verif_ea = 0;
+	pars->map_verif = 0;
+}
+
 void	intit_struct_pars(t_parsing *pars)
 {
 	pars->info = NULL;
-	pars->worldMap = NULL;
+	pars->worldmap = NULL;
 	pars->path_txt_no = NULL;
 	pars->path_txt_so = NULL;
 	pars->path_txt_we = NULL;
@@ -36,6 +49,7 @@ void	intit_struct_pars(t_parsing *pars)
 	pars->key_right = 0;
 	pars->key_left = 0;
 	pars->key_echap = 0;
+	intit_struct_pars2(pars);
 }
 
 void	ft_realloc_map(t_parsing *pars, char *line)

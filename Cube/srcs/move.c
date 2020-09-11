@@ -14,46 +14,42 @@
 
 void	move_right(t_parsing *pars)
 {
-	if (pars->worldMap[(int)(pars->posX + pars->planeX *
-	pars->moveSpeed)][(int)pars->posY] != '1')
-		pars->posX += pars->planeX * pars->moveSpeed;
-	if (pars->worldMap[(int)pars->posX][(int)(pars->posY +
-	pars->planeY * pars->moveSpeed)] != '1')
-		pars->posY += pars->planeY * pars->moveSpeed;
-	raycasting(pars);
+	if (pars->worldmap[(int)(pars->posx + pars->planex *
+	pars->movespeed)][(int)pars->posy] != '1')
+		pars->posx += pars->planex * pars->movespeed;
+	if (pars->worldmap[(int)pars->posx][(int)(pars->posy +
+	pars->planey * pars->movespeed)] != '1')
+		pars->posy += pars->planey * pars->movespeed;
 }
 
 void	move_left(t_parsing *pars)
 {
-	if (pars->worldMap[(int)(pars->posX - pars->planeX *
-	pars->moveSpeed)][(int)pars->posY] != '1')
-		pars->posX -= pars->planeX * pars->moveSpeed;
-	if (pars->worldMap[(int)pars->posX][(int)(pars->posY -
-	pars->planeY * pars->moveSpeed)] != '1')
-		pars->posY -= pars->planeY * pars->moveSpeed;
-	raycasting(pars);
+	if (pars->worldmap[(int)(pars->posx - pars->planex *
+	pars->movespeed)][(int)pars->posy] != '1')
+		pars->posx -= pars->planex * pars->movespeed;
+	if (pars->worldmap[(int)pars->posx][(int)(pars->posy -
+	pars->planey * pars->movespeed)] != '1')
+		pars->posy -= pars->planey * pars->movespeed;
 }
 
 void	move_up(t_parsing *pars)
 {
-	if (pars->worldMap[(int)(pars->posX + pars->dirX *
-	pars->moveSpeed)][(int)pars->posY] != '1')
-		pars->posX += pars->dirX * pars->moveSpeed;
-	if (pars->worldMap[(int)pars->posX][(int)(pars->posY +
-	pars->dirY * pars->moveSpeed)] != '1')
-		pars->posY += pars->dirY * pars->moveSpeed;
-	raycasting(pars);
+	if (pars->worldmap[(int)(pars->posx + pars->dirx *
+	pars->movespeed)][(int)pars->posy] != '1')
+		pars->posx += pars->dirx * pars->movespeed;
+	if (pars->worldmap[(int)pars->posx][(int)(pars->posy +
+	pars->diry * pars->movespeed)] != '1')
+		pars->posy += pars->diry * pars->movespeed;
 }
 
 void	move_down(t_parsing *pars)
 {
-	if (pars->worldMap[(int)(pars->posX - pars->dirX *
-	pars->moveSpeed)][(int)pars->posY] != '1')
-		pars->posX -= pars->dirX * pars->moveSpeed;
-	if (pars->worldMap[(int)pars->posX][(int)(pars->posY -
-	pars->dirY * pars->moveSpeed)] != '1')
-		pars->posY -= pars->dirY * pars->moveSpeed;
-	raycasting(pars);
+	if (pars->worldmap[(int)(pars->posx - pars->dirx *
+	pars->movespeed)][(int)pars->posy] != '1')
+		pars->posx -= pars->dirx * pars->movespeed;
+	if (pars->worldmap[(int)pars->posx][(int)(pars->posy -
+	pars->diry * pars->movespeed)] != '1')
+		pars->posy -= pars->diry * pars->movespeed;
 }
 
 int		key_action(t_parsing *pars)
@@ -76,8 +72,6 @@ int		key_action(t_parsing *pars)
 		turn_right(pars);
 	if (pars->key_left == 1)
 		turn_left(pars);
-	if (pars->key_d == 0 && pars->key_left == 0 && pars->key_q == 0 &&
-	pars->key_right == 0 && pars->key_s == 0 && pars->key_z == 0)
-		raycasting(pars);
+	raycasting(pars);
 	return (0);
 }

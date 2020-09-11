@@ -44,8 +44,8 @@ void	free_all(t_parsing *pars)
 {
 	if (pars->info != NULL)
 		free_char_double(pars->info);
-	if (pars->worldMap != NULL)
-		free_char_double(pars->worldMap);
+	if (pars->worldmap != NULL)
+		free_char_double(pars->worldmap);
 	if (pars->path_txt_no != NULL)
 		free(pars->path_txt_no);
 	if (pars->path_txt_so != NULL)
