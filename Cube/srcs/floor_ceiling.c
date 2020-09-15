@@ -26,10 +26,10 @@ void	my_mlx_pixel_put(t_parsing *pars, int x, int y, int color)
 	}
 	else
 	{
-		pars->addr[pos + 0] = color;
-		pars->addr[pos + 1] = color;
-		pars->addr[pos + 2] = color;
-		pars->addr[pos + 3] = color;
+		pars->addr[pos + 0] = pars->blue;
+		pars->addr[pos + 1] = pars->green;
+		pars->addr[pos + 2] = pars->red;
+		pars->addr[pos + 3] = 0;
 	}
 }
 
@@ -44,7 +44,7 @@ void	color_ceiling(t_parsing *pars, int x)
 		pars->red = pars->r_ceil;
 		pars->green = pars->g_ceil;
 		pars->blue = pars->b_ceil;
-		my_mlx_pixel_put(pars, x, i, 255);
+		my_mlx_pixel_put(pars, x, i, 0);
 		i++;
 	}
 }
@@ -60,7 +60,7 @@ void	color_floor(t_parsing *pars, int x)
 		pars->red = pars->r_floor;
 		pars->green = pars->g_floor;
 		pars->blue = pars->b_floor;
-		my_mlx_pixel_put(pars, x, i, 255);
+		my_mlx_pixel_put(pars, x, i, 0);
 		i++;
 	}
 }

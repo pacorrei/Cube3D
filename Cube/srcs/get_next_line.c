@@ -35,6 +35,7 @@ char	*search_line(int fd, char **line, char *str)
 	int		ret;
 	char	*temp;
 
+	ret = 0;
 	if (verif_erreurs(fd, line) == 1)
 		return (NULL);
 	while ((verif_tab(str) == 0) && (ret = read(fd, buff, BUFFER_SIZE)) > 0)

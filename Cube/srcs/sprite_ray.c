@@ -18,14 +18,14 @@ void	draw_sprite_value(t_parsing *pars)
 		pars->spri_drawstarty = 0;
 	pars->spri_drawendy = pars->spriteheight / 2 + pars->h / 2;
 	if (pars->spri_drawendy >= pars->h)
-		pars->spri_drawendy = pars->h - 1;
+		pars->spri_drawendy = pars->h;
 	pars->spritewidth = abs((int)(pars->h / (pars->transformy)));
 	pars->spri_drawstartx = -pars->spritewidth / 2 + pars->spritescreenx;
 	if (pars->spri_drawstartx < 0)
 		pars->spri_drawstartx = 0;
 	pars->spri_drawendx = pars->spritewidth / 2 + pars->spritescreenx;
 	if (pars->spri_drawendx >= pars->w)
-		pars->spri_drawendx = pars->w - 1;
+		pars->spri_drawendx = pars->w;
 	pars->stripe = pars->spri_drawstartx;
 }
 
@@ -55,6 +55,10 @@ int		draw_sprite(t_parsing *pars, int y)
 	pars->spriteheight * 128;
 	pars->spri_texy = ((d * pars->tex_height) /
 	pars->spriteheight) / 256;
+	if (pars->spri_texy < 0)
+		pars->spri_texy = 0;
+	if (pars->spri_texx < 0)
+		pars->spri_texx = 0;
 	pars->alpha = pars->addr_s[pars->line_length_s *
 	pars->spri_texy + pars->spri_texx * 4];
 	pars->red = pars->addr_s[pars->line_length_s *

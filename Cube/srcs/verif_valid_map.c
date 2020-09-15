@@ -31,8 +31,8 @@ void	make_world_map(t_parsing *pars, int imin, int imax)
 			if (pars->worldmap[i][j] == 'N' || pars->worldmap[i][j] == 'S'
 			|| pars->worldmap[i][j] == 'E' || pars->worldmap[i][j] == 'W')
 			{
-				pars->posy = j + 0.5;
-				pars->posx = i + 0.5;
+				pars->posy = j + 0.4;
+				pars->posx = i + 0.4;
 			}
 			j++;
 		}
