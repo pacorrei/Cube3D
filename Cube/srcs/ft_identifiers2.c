@@ -49,8 +49,7 @@ void	identifiers_c(t_parsing *pars, int i, int j)
 	while (pars->info[i][j] != '\0')
 	{
 		if (pars->info[i][j] != ' ' && (pars->info[i][j] < '0'
-		|| pars->info[i][j] > '9') &&
-		pars->info[i][j] != ',')
+		|| pars->info[i][j] > '9') && pars->info[i][j] != ',')
 			error_informations(pars);
 		if (pars->info[i][j] == ',' && ((pars->info[i][j + 1] < '0'
 		|| pars->info[i][j + 1] > '9')
@@ -59,13 +58,14 @@ void	identifiers_c(t_parsing *pars, int i, int j)
 		if (pars->verif == 3 && pars->info[i][j] != ' ')
 			error_informations(pars);
 		if (pars->info[i][j] >= '0' && pars->info[i][j] <= '9')
-		{
 			j = search_nb_c(pars, i, j);
-		}
 		j++;
 	}
 	if (pars->verif == 0 || pars->verif == 1 || pars->verif == 2)
 		error_miss_informations(pars);
+	if (pars->r_ceil > 255 || pars->r_ceil < 0 || pars->g_ceil > 255 ||
+	pars->g_ceil < 0 || pars->b_ceil > 255 || pars->b_ceil < 0)
+		error_informations(pars);
 	pars->verif_c = 1;
 }
 
@@ -106,8 +106,7 @@ void	identifiers_f(t_parsing *pars, int i, int j)
 	while (pars->info[i][j] != '\0')
 	{
 		if (pars->info[i][j] != ' ' && (pars->info[i][j] < '0'
-		|| pars->info[i][j] > '9') &&
-		pars->info[i][j] != ',')
+		|| pars->info[i][j] > '9') && pars->info[i][j] != ',')
 			error_informations(pars);
 		if (pars->info[i][j] == ',' && ((pars->info[i][j + 1] < '0'
 		|| pars->info[i][j + 1] > '9')
@@ -116,12 +115,13 @@ void	identifiers_f(t_parsing *pars, int i, int j)
 		if (pars->verif == 3 && pars->info[i][j] != ' ')
 			error_informations(pars);
 		if (pars->info[i][j] >= '0' && pars->info[i][j] <= '9')
-		{
 			j = search_nb_f(pars, i, j);
-		}
 		j++;
 	}
 	if (pars->verif == 0 || pars->verif == 1 || pars->verif == 2)
 		error_miss_informations(pars);
+	if (pars->r_floor > 255 || pars->r_floor < 0 || pars->g_floor > 255 ||
+	pars->g_floor < 0 || pars->b_floor > 255 || pars->b_floor < 0)
+		error_informations(pars);
 	pars->verif_f = 1;
 }

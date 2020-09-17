@@ -14,14 +14,14 @@
 
 void	error_informations(t_parsing *pars)
 {
-	ft_putstr("Error wrong informations");
+	ft_putstr("Error\nwrong informations");
 	free_all(pars);
 	exit(1);
 }
 
 void	error_malloc(t_parsing *pars)
 {
-	ft_putstr("Error malloc fail");
+	ft_putstr("Error\nmalloc fail");
 	free_all(pars);
 	exit(1);
 }

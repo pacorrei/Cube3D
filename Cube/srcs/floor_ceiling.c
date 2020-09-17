@@ -38,7 +38,7 @@ void	color_ceiling(t_parsing *pars, int x)
 	int i;
 
 	i = 0;
-	while (i < pars->drawstart)
+	while (i <= pars->drawstart)
 	{
 		pars->alpha = 0;
 		pars->red = pars->r_ceil;
@@ -54,7 +54,7 @@ void	color_floor(t_parsing *pars, int x)
 	int i;
 
 	i = pars->drawend + 1;
-	while (i < pars->h)
+	while (i <= pars->h)
 	{
 		pars->alpha = 0;
 		pars->red = pars->r_floor;

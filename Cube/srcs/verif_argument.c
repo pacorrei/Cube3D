@@ -22,7 +22,7 @@ void	verif_argument(char *str)
 	while (str[i] != '\0')
 	{
 		if (str[i] == '.' && str[i + 1] == 'c' && str[i + 2] == 'u' &&
-		str[i + 3] == 'b')
+		str[i + 3] == 'b' && str[i + 4] == '\0')
 			verif = 1;
 		i++;
 	}
@@ -40,7 +40,8 @@ void	verif_argument_save(char *str)
 	while (str[i] != '\0')
 	{
 		if (str[i] == '-' && str[i + 1] == '-' && str[i + 2] == 's' &&
-		str[i + 3] == 'a' && str[i + 4] == 'v' && str[i + 5] == 'e')
+		str[i + 3] == 'a' && str[i + 4] == 'v' && str[i + 5] == 'e'
+		&& ft_strlen(str) == 6)
 			verif = 1;
 		i++;
 	}

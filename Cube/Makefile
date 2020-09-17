@@ -7,7 +7,7 @@ CC = gcc
 
 RM = rm -rf
 
-HEAD = -I include/ -I /usr/local/include -L /usr/local/lib  -lmlx -lm -lXext -lX11 -lbsd
+HEAD = -I include/ -I include/ -L include/  -lmlx -lm -lXext -lX11 -lbsd
 
 
 SRCS_PATH = srcs/

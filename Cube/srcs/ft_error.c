@@ -14,34 +14,34 @@
 
 void	error_miss_informations(t_parsing *pars)
 {
-	ft_putstr("Error miss informations");
+	ft_putstr("Error\nmiss informations");
 	free_all(pars);
 	exit(1);
 }
 
 void	error_argument(void)
 {
-	ft_putstr("Error wrong argument");
+	ft_putstr("Error\nwrong argument");
 	exit(1);
 }
 
 void	error_read_file(t_parsing *pars)
 {
-	ft_putstr("Error failed read file");
+	ft_putstr("Error\nfailed read file");
 	free_all(pars);
 	exit(1);
 }
 
 void	error_bmp_file(t_parsing *pars)
 {
-	ft_putstr("Error failed open file");
+	ft_putstr("Error\nfailed open file");
 	free_all(pars);
 	exit(1);
 }
 
 void	error_write_bmp(t_parsing *pars)
 {
-	ft_putstr("Error failed write in bmp");
+	ft_putstr("Error\nfailed write in bmp");
 	free_all(pars);
 	exit(1);
 }
